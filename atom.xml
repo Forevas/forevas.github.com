@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://forevas.github.io/"/>
-  <updated>2017-02-22T14:50:22.801Z</updated>
+  <updated>2017-02-26T12:56:54.630Z</updated>
   <id>https://forevas.github.io/</id>
   
   <author>
@@ -20,22 +20,51 @@
     <link href="https://forevas.github.io/2017/01/08/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
     <id>https://forevas.github.io/2017/01/08/新的开始/</id>
     <published>2017-01-08T15:05:14.000Z</published>
-    <updated>2017-02-22T14:50:22.801Z</updated>
+    <updated>2017-02-26T12:56:54.630Z</updated>
     
     <content type="html"><![CDATA[<p>这是<strong>新的开始</strong>，我用hexo创建了第一篇文章。</p>
 <ul>
 <li><a id="more"></a>
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><h1 id="Swig语法"><a href="#Swig语法" class="headerlink" title="Swig语法"></a>Swig语法</h1><blockquote><p>Every interaction is both precious and an opportunity to delight.</p>
-<footer><strong>Seth Godin</strong><cite><a href="http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html" target="_blank" rel="external">Welcome to Island Marketing</a></cite></footer></blockquote>
-<h1 id="Markdown语法"><a href="#Markdown语法" class="headerlink" title="Markdown语法"></a>Markdown语法</h1><blockquote>
-<p>Every interaction is both precious and an opportunity to delight.</p>
-</blockquote>
 </li>
 </ul>
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><h1 id="Swig语法-1"><a href="#Swig语法-1" class="headerlink" title="Swig语法"></a>Swig语法</h1><a href="http://gank.io/" title="粉丝日志" target="_blank">gank日志</a>
-<h1 id="Markdown语法-1"><a href="#Markdown语法-1" class="headerlink" title="Markdown语法"></a>Markdown语法</h1><p><a href="http://gank.io/" target="_blank" rel="external">gank日志</a></p>
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><h1 id="Markdown语法-2"><a href="#Markdown语法-2" class="headerlink" title="Markdown语法"></a>Markdown语法</h1><p><img src="http://o7xxrho8u.bkt.clouddn.com/img/windrunnerlihuan%E5%8D%9A%E5%AE%A2/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/meizi.jpg" alt="这是一张图片"></p>
-<h2 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h2><p>$$J_\alpha(x)=\sum _{m=0}^\infty \frac{(-1)^ m}{m! \, \Gamma (m + \alpha + 1)}{\left({\frac{x}{2}}\right)}^{2 m + \alpha }$$<br>感觉非常好。</p>
+<p>之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。</p>
+<p>下面是一些常用的语法：</p>
+<h1 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h1><p>在文章中插入引言，可包含作者、来源和标题。</p>
+<h2 id="别号：-quote"><a href="#别号：-quote" class="headerlink" title="别号： quote"></a>别号： quote</h2><blockquote><p>content</p>
+<footer><strong>[author[</strong><cite>source]] [link] [source_link_title]</cite></footer></blockquote>
+<h2 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h2><p>没有提供参数，则只输出普通的 blockquote<br><blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque hendrerit lacus ut purus iaculis feugiat. Sed nec tempor elit, quis aliquam neque. Curabitur sed diam eget dolor fermentum semper at eu lorem.</p>
+</blockquote></p>
+<h2 id="引用书上的句子"><a href="#引用书上的句子" class="headerlink" title="引用书上的句子"></a>引用书上的句子</h2><blockquote><p>Do not just seek happiness for yourself. Seek happiness for all. Through kindness. Through mercy.</p>
+<footer><strong>David Levithan</strong><cite>Wide Awake</cite></footer></blockquote>
+<h2 id="引用-Twitter"><a href="#引用-Twitter" class="headerlink" title="引用 Twitter"></a>引用 Twitter</h2><blockquote><p>NEW: DevDocs now comes with syntax highlighting. <a href="http://devdocs.io" target="_blank" rel="external">http://devdocs.io</a></p>
+<footer><strong>@DevDocs</strong><cite><a href="https://twitter.com/devdocs/status/356095192085962752" target="_blank" rel="external">twitter.com/devdocs/status/356095192085962752</a></cite></footer></blockquote>
+<h2 id="引用网络上的文章"><a href="#引用网络上的文章" class="headerlink" title="引用网络上的文章"></a>引用网络上的文章</h2><blockquote><p>Every interaction is both precious and an opportunity to delight.</p>
+<footer><strong>Seth Godin</strong><cite><a href="http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html" target="_blank" rel="external">Welcome to Island Marketing</a></cite></footer></blockquote>
+<h1 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h1><p>在文章中插入代码。<br>别名： code<br><figure class="highlight plain"><figcaption><span>[title] [] [url] [link text]</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">code snippet</div></pre></td></tr></table></figure></p>
+<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h2><p>普通的代码块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alert(&apos;Hello World!&apos;);</div></pre></td></tr></table></figure><br>指定语言<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[rectangle setX: <span class="number">10</span> y: <span class="number">10</span> width: <span class="number">20</span> height: <span class="number">20</span>];</div></pre></td></tr></table></figure><br>附加说明<br><figure class="highlight plain"><figcaption><span>Array.map</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.map(callback[, thisArg])</div></pre></td></tr></table></figure><br>附加说明和网址<br><figure class="highlight plain"><figcaption><span>_.compact</span><a href="http://underscorejs.org/#compact" target="_blank" rel="external">Underscore.js</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_.compact([0, 1, false, 2, &apos;&apos;, 3]);</div><div class="line">=&gt; [1, 2, 3]</div></pre></td></tr></table></figure></p>
+<h1 id="反引号代码块"><a href="#反引号代码块" class="headerlink" title="反引号代码块"></a>反引号代码块</h1><p>另一种形式的代码块，不同的是它使用三个反引号来包裹。</p>
+<p><code>[language] [title] [url] [link text] code snippet</code></p>
+<h1 id="Pull-Quote"><a href="#Pull-Quote" class="headerlink" title="Pull Quote"></a>Pull Quote</h1><p>在文章中插入 Pull quote。<br><blockquote class="pullquote [class]"><p>content</p>
+</blockquote></p>
+<h1 id="jsFiddle"><a href="#jsFiddle" class="headerlink" title="jsFiddle"></a>jsFiddle</h1><p>在文章中嵌入 jsFiddle。<br><iframe scrolling="no" width="[width]" height="[height]" src="http://jsfiddle.net/shorttag/embedded/[tabs]/[skin]" frameborder="0" allowfullscreen></iframe></p>
+<h1 id="Gist"><a href="#Gist" class="headerlink" title="Gist"></a>Gist</h1><p>在文章中嵌入 Gist。<br><script src="//gist.github.com/gist_id.js?file=[filename]"></script></p>
+<h1 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h1><p>在文章中插入 iframe。<br><iframe src="url" width="[width]" height="[height]" frameborder="0" allowfullscreen></iframe></p>
+<h1 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h1><p>在文章中插入指定大小的图片。<br><img src="/path/to/image" class="[class names]" title="[width] [height] [title text [alt text]]"></p>
+<h1 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h1><p>在文章中插入链接，并自动给外部链接添加 target=”_blank” 属性。<br><a>text url [external] [title]</a></p>
+<h1 id="Include-Code"><a href="#Include-Code" class="headerlink" title="Include Code"></a>Include Code</h1><p>插入 source 文件夹内的代码文件。<br></p>
+<h1 id="Youtube"><a href="#Youtube" class="headerlink" title="Youtube"></a>Youtube</h1><p>在文章中插入 Youtube 视频。<br><div class="video-container"><iframe src="//www.youtube.com/embed/video_id" frameborder="0" allowfullscreen></iframe></div></p>
+<h1 id="Vimeo"><a href="#Vimeo" class="headerlink" title="Vimeo"></a>Vimeo</h1><p>在文章中插入 Vimeo 视频。<br><div class="video-container"><iframe src="//player.vimeo.com/video/video_id" frameborder="0" allowfullscreen></iframe></div></p>
+<h1 id="引用文章"><a href="#引用文章" class="headerlink" title="引用文章"></a>引用文章</h1><p>引用其他文章的链接。<br><br></p>
+<h1 id="引用资源"><a href="#引用资源" class="headerlink" title="引用资源"></a>引用资源</h1><p>引用文章的资源。<br><br><br></p>
+<h1 id="Raw"><a href="#Raw" class="headerlink" title="Raw"></a>Raw</h1><p>如果您想在文章中插入 Swig 标签，可以尝试使用 Raw 标签，以免发生解析异常。<br>
+content
+</p>
+<blockquote>
+<p>Every interaction is both precious and an opportunity to delight.</p>
+</blockquote>
+<h1 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h1><p>$$J_\alpha(x)=\sum _{m=0}^\infty \frac{(-1)^ m}{m! \, \Gamma (m + \alpha + 1)}{\left({\frac{x}{2}}\right)}^{2 m + \alpha }$$</p>
+<p>比较了一下，感觉还是Markdown语法比较简洁，以后就用Markdown写东西了。最后上一张吾王的美照。<br><img src="http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1601/25/c0/17903354_1453732707215_800x600.jpg" alt="saber"></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo文档</a><br><a href="http://www.appinn.com/markdown/" target="_blank" rel="external">Markdown语法</a></p>
 ]]></content>
     
     <summary type="html">
