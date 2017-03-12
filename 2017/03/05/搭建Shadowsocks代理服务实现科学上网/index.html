@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Forevas" />
+
+
+
+<meta name="description" content="众所周知，由于GFW的存在，Google，YouTube等一系列网站被挡在了墙外，这样一来很多优质资源都无法访问。作为一名程序猿，平时工作需要查阅不少资料，用百度很不方便。之前也用过第三方的VPN和免费蓝灯，但是总感觉不安全，而且不是很稳定。而自己除了本职工作之外，平时也喜欢研究一些相关技术，所以就萌生了自己搭建VPN的想法。经过一段时间的折腾，VPN是搭好了，结果发现完全连不上，后来了解到使用P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Shadowsocks代理服务实现科学上网">
+<meta property="og:url" content="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/index.html">
+<meta property="og:site_name" content="厚德载物，追求卓越">
+<meta property="og:description" content="众所周知，由于GFW的存在，Google，YouTube等一系列网站被挡在了墙外，这样一来很多优质资源都无法访问。作为一名程序猿，平时工作需要查阅不少资料，用百度很不方便。之前也用过第三方的VPN和免费蓝灯，但是总感觉不安全，而且不是很稳定。而自己除了本职工作之外，平时也喜欢研究一些相关技术，所以就萌生了自己搭建VPN的想法。经过一段时间的折腾，VPN是搭好了，结果发现完全连不上，后来了解到使用P">
+<meta property="og:image" content="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/GFW工作原理.png">
+<meta property="og:image" content="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/VPN翻墙原理.png">
+<meta property="og:image" content="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/shadowsocks翻墙原理.png">
+<meta property="og:image" content="https://forevas.github.io/注册页面.png">
+<meta property="og:image" content="https://forevas.github.io/选择操作系统.png">
+<meta property="og:image" content="https://forevas.github.io/选择服务器配置.png">
+<meta property="og:image" content="https://forevas.github.io/选择机房位置.png">
+<meta property="og:image" content="https://forevas.github.io/sshkey配置.png">
+<meta property="og:image" content="https://forevas.github.io/创建完成.png">
+<meta property="og:image" content="https://forevas.github.io/登录成功.png">
+<meta property="og:image" content="https://forevas.github.io/更新软件包列表.png">
+<meta property="og:image" content="https://forevas.github.io/本地配置.png">
+<meta property="og:image" content="https://forevas.github.io/google.png">
+<meta property="og:image" content="https://forevas.github.io/网卡信息.png">
+<meta property="og:image" content="https://forevas.github.io/系统内核.png">
+<meta property="og:image" content="https://forevas.github.io/YouTube.png">
+<meta property="og:image" content="https://forevas.github.io/亚丝娜.jpg">
+<meta property="og:updated_time" content="2017-03-12T08:29:11.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建Shadowsocks代理服务实现科学上网">
+<meta name="twitter:description" content="众所周知，由于GFW的存在，Google，YouTube等一系列网站被挡在了墙外，这样一来很多优质资源都无法访问。作为一名程序猿，平时工作需要查阅不少资料，用百度很不方便。之前也用过第三方的VPN和免费蓝灯，但是总感觉不安全，而且不是很稳定。而自己除了本职工作之外，平时也喜欢研究一些相关技术，所以就萌生了自己搭建VPN的想法。经过一段时间的折腾，VPN是搭好了，结果发现完全连不上，后来了解到使用P">
+<meta name="twitter:image" content="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/GFW工作原理.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="厚德载物，追求卓越" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>搭建Shadowsocks代理服务实现科学上网 | 厚德载物，追求卓越</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?da71766ba1c7434dc8d65850fd8ef070";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/forevas.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Forevas</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我的征途是星辰大海</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/GFW/">GFW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shadowsocks/">Shadowsocks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socks5/">Socks5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VPS/">VPS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-world/">hello world</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锐速/">锐速</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">程序员一枚</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Forevas</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/forevas.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Forevas</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我的征途是星辰大海</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-搭建Shadowsocks代理服务实现科学上网" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/" class="article-date">
+      <time datetime="2017-03-05T08:16:37.000Z" itemprop="datePublished">2017-03-05</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建Shadowsocks代理服务实现科学上网
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GFW/">GFW</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Shadowsocks/">Shadowsocks</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socks5/">Socks5</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VPS/">VPS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/锐速/">锐速</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>众所周知，由于GFW的存在，Google，YouTube等一系列网站被挡在了墙外，这样一来很多优质资源都无法访问。作为一名程序猿，平时工作需要查阅不少资料，用百度很不方便。之前也用过第三方的VPN和免费蓝灯，但是总感觉不安全，而且不是很稳定。而自己除了本职工作之外，平时也喜欢研究一些相关技术，所以就萌生了自己搭建VPN的想法。经过一段时间的折腾，VPN是搭好了，结果发现完全连不上，后来了解到使用PPTP协议的VPN早都被封了。之后经过研究，发现Shadowsocks代理很方便，自己也成功的搭建了服务。这里总结下自己搭建的过程，以供以后参阅：<br><a id="more"></a></p>
+<p>先来分析一波原理，没有耐心看的可以直接跳转到搭建过程~~</p>
+<h1 id="关于GFW"><a href="#关于GFW" class="headerlink" title="关于GFW"></a>关于GFW</h1><p>GFW(Great Firewall of China)是一套建立在我国骨干网国际出口上的网络内容检测和过滤系统，国内所有的运营商的流量最后全部都要接入GFW的机房之后才能够出国。这套系统功能就是过滤不和谐的内容,实现的方法主要是IP封锁，DNS劫持和污染，关键字检测等手段。</p>
+<p align="center"><img src="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/GFW工作原理.png" alt="GFW工作原理" title="GFW工作原理"></p>
+
+<h2 id="IP封锁："><a href="#IP封锁：" class="headerlink" title="IP封锁："></a>IP封锁：</h2><p>IP封锁是指防火墙维护一张IP黑名单，会将一些不想让你访问的网站的IP收入其中，一旦发现发往黑名单中地址的请求数据包，就直接将其丢弃，这将导致源主机得不到目标主机的及时响应而引发超时，从而达到屏蔽对目标主机的访问的目的。</p>
+<h2 id="DNS劫持和污染："><a href="#DNS劫持和污染：" class="headerlink" title="DNS劫持和污染："></a>DNS劫持和污染：</h2><p>DNS劫持又称域名劫持，是指在劫持的网络范围内拦截域名解析的请求，分析请求的域名，把审查范围以外的请求放行，否则返回假的IP地址或者什么都不做使请求失去响应，其效果就是对特定的网络不能反应或访问的是假网址。</p>
+<p>域名服务器缓存污染（DNS cache pollution），又称域名服务器缓存投毒（DNS cache poisoning），是指一些刻意制造或无意中制造出来的域名服务器封包，把域名指往不正确的IP地址。一般来说，在互联网上都有可信赖的域名服务器，但为减低网络上的流量压力，一般的域名服务器都会把从上游的域名服务器获得的解析记录暂存起来，待下次有其他机器要求解析域名时，可以立即提供服务。一旦有关域名的局域域名服务器的缓存受到污染，就会把域名内的电脑导引往错误的服务器或服务器的网址。</p>
+<h2 id="关键字检测"><a href="#关键字检测" class="headerlink" title="关键字检测"></a>关键字检测</h2><p>GFW一旦发现连接有敏感词，就会伪装成连接两方，向真正的对方发送 RST 数据包。由于RST标示复位、可以用来异常的关闭连接。所以收到RST数据包会导致连接关闭，从而达到阻断连接的目的。</p>
+<p>所以想要绕过GFW必须克服以上的封锁手段。</p>
+<h1 id="关于VPN"><a href="#关于VPN" class="headerlink" title="关于VPN"></a>关于VPN</h1><p>虚拟专用网（英语：Virtual Private Network，简称VPN），是一种常用于连接中、大型企业或团体与团体间的私人网络的通讯方法。虚拟私人网络的讯息透过公用的网络架构（例如：互联网）来传送内联网的网络讯息。它利用已加密的通道协议（Tunneling Protocol）来达到保密、发送端认证、消息准确性等私人消息安全效果。这种技术可以用不安全的网络（例如：互联网）来发送可靠、安全的消息。</p>
+<p align="center"><img src="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/VPN翻墙原理.png" alt="VPN翻墙原理" title="VPN翻墙原理"></p>
+
+<p>上图基本说明了VPN的原理，首先客户端访问VPN服务器(前提是VPN服务器没有被墙)，然后建立加密的数据通道，通道建立之后，用户就可以通过VPN访问目标网站。不过VPN的流量特征很明显，握手阶段依然是明文，导致匹配流量特征很容易。在VPN科学上网这方面，一些地区已经根据VPN的流量特征做出了相应的匹配策略，可以有效封杀VPN了，像我之前用的PPTP协议基本上已经没办法再用了。</p>
+<h1 id="关于Socks5"><a href="#关于Socks5" class="headerlink" title="关于Socks5"></a>关于Socks5</h1><p>Socks5是一个代理协议，它工作在OSI七层模型的会话层，它对于上层协议(HTTP,FTP,SMTP等)是透明的，当我们打开本地代理后，本地Socks5客户端会通过事先和服务端协商好的加密协议对请求数据进行加密，这就避免了VPN握手阶段明文的问题，服务器收到请求后解密数据转发给真正的目标服务器，返回的数据也会进行加密再返回，整个通信过程均采用加密通信，至今也没有发现明显的流量特征，因此不会被GFW察觉。</p>
+<p align="center"><img src="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/shadowsocks翻墙原理.png" alt="shadowsocks翻墙原理" title="shadowsocks翻墙原理"></p>
+
+<h1 id="关于Shadowsocks"><a href="#关于Shadowsocks" class="headerlink" title="关于Shadowsocks"></a>关于Shadowsocks</h1><p>一款基于Socks5协议实现的软件，分为服务端和客户端，需要先将服务器端部署到服务器上面，然后通过客户端连接并创建本地代理。</p>
+<h1 id="关于锐速"><a href="#关于锐速" class="headerlink" title="关于锐速"></a>关于锐速</h1><p>一款加速软件，原理是通过算法优化TCP的拥塞控制机制，预判并及时重传可能的丢包，从而实现加速的效果。我们搭建好了Socks代理之后会用到它，否则会有点卡。</p>
+<p>好了，关于基础的一些理论就研究到这里，废话不多说，开始我们的搭建过程吧。</p>
+<h1 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h1><h2 id="创建VPS"><a href="#创建VPS" class="headerlink" title="创建VPS"></a>创建VPS</h2><p>第一步，我们需要租一个位于国外的VPS，这里给大家推荐<a href="https://www.digitalocean.com/" target="_blank" rel="external">DigitalOcean</a>,每个月最低只要5$，而且支持<a href="https://www.paypal.com/cn/home" target="_blank" rel="external">Paypal</a>支付，很方便。</p>
+<p>在首页输入账号和密码注册，验证后点击 Create Droplet创建服务器，系统会提示充值，可以使用信用卡支付，若你的信用卡不支持可以选择用<a href="https://www.paypal.com/cn/home" target="_blank" rel="external">Paypal</a>支付(可以想象成支付宝)，没有<a href="https://www.paypal.com/cn/home" target="_blank" rel="external">Paypal</a>账户的话直接去申请一个，绑定一张银联卡，国内大行的卡都可以。然后进行支付即可。<br><img src="注册页面.png" alt="注册页面"></p>
+<hr>
+<p>支付完成后就可以创建VPS了，点击右上角 Create Droplet，然后选择操作系统，这里我选择的是Ubuntu14.04x64的系统，不要选太高版本，后面要装的锐速不支持太高版本的内核。</p>
+<p align="center"><img src="选择操作系统.png" alt="选择操作系统"></p>
+
+<hr>
+<p>VPS配置选择，若只用于上网，选最低配置足够了。</p>
+<p align="center"><img src="选择服务器配置.png" alt="选择服务器配置"></p>
+
+<hr>
+<p>机房位置推荐San Francisco的机房，感觉速度还可以，之前试过New York的，感觉速度一般，大家可以点击<a href="http://speedtest-nyc1.digitalocean.com/" target="_blank" rel="external">这里</a>测一下各个结点的网络状况，选择最适合自己的即可。</p>
+<p align="center"><img src="选择机房位置.png" alt="选择机房位置"></p>
+
+<hr>
+<p>SSH Key配置，配置了之后可以使用密钥登录，这个比用密码登录的安全系数要高。密钥形式登录的原理是：利用密钥生成器制作一对密钥——一只公钥和一只私钥。将公钥添加到服务器的某个账户上，然后在客户端利用私钥即可完成认证并登录。这里先不讨论这个问题了，下文的链接有生成密钥的方法。直接点击Create即可。</p>
+<p align="center"><img src="sshkey配置.png" alt="sshkey配置"></p>
+
+<hr>
+<p>到这里后，服务器就创建好了，一定要牢记IP Address，以后登录服务器都要用到它。</p>
+<p align="center"><img src="创建完成.png" alt="创建完成.png"></p>
+
+
+<hr>
+<h2 id="登录并初始化"><a href="#登录并初始化" class="headerlink" title="登录并初始化"></a>登录并初始化</h2><p>现在我们已经可以登录这台服务器了。Linux下就不用说了，相信对大家来说都很简单。主要说说Windows，首先我们需要一个Shell终端，Putty、XShell等等都可以，这里我使用了Git(一款免费、开源的分布式版本控制系统)自带的Shell终端，这里不管你使用的是哪种Shell终端，打开命令行后，输入以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh root@your_ip</div></pre></td></tr></table></figure>
+<p><code>your_ip</code>换成要换成刚才创建的服务器的IP地址。登录成功后会看到如下界面：</p>
+<p align="center"><img src="登录成功.png" alt="登录成功"></p>
+
+
+<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># apt-get update</div></pre></td></tr></table></figure></p>
+<p>更新软件包列表：</p>
+<p align="center"><img src="更新软件包列表.png" alt="更新软件包列表"></p>
+
+<p>官方推荐<a href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04" target="_blank" rel="external">这篇教程</a>来提高服务器的安全性，大家有空可以看一下。</p>
+<h2 id="配置Socks5代理"><a href="#配置Socks5代理" class="headerlink" title="配置Socks5代理"></a>配置Socks5代理</h2><p>执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># apt-get install python-m2crypto</div><div class="line"># apt-get install python-pip</div><div class="line"># pip install shadowsocks</div></pre></td></tr></table></figure></p>
+<p>至此，shadowsocks服务端已经成功安装，然后执行以下命令编辑配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/shadowsocks.json</div></pre></td></tr></table></figure></p>
+<p>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;server&quot;:&quot;your_server_ip&quot;,</div><div class="line">    &quot;server_port&quot;:8388,</div><div class="line">    &quot;local_address&quot;: &quot;127.0.0.1&quot;,</div><div class="line">    &quot;local_port&quot;:1080,</div><div class="line">    &quot;password&quot;:&quot;choose_your_password&quot;,</div><div class="line">    &quot;timeout&quot;:300,</div><div class="line">    &quot;method&quot;:&quot;aes-256-cfb&quot;,</div><div class="line">    &quot;fast_open&quot;: false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>将<code>your_server_ip</code>替换为你的服务器IP，<code>choose_your_password</code>替换为自己想要设置的密码(这个密码将用来验证连接者的身份)，然后保存退出。</p>
+<p>执行以下命令启动服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># ssserver -c /etc/shadowsocks.json -d start</div></pre></td></tr></table></figure></p>
+<p>想要停止服务则执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># ssserver -d stop</div></pre></td></tr></table></figure></p>
+<p>至此，socks5代理服务已经配置成功。接下来配置本地代理。</p>
+<h2 id="本地代理配置"><a href="#本地代理配置" class="headerlink" title="本地代理配置"></a>本地代理配置</h2><p>点击<a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="external">这里</a>下载Shadowsocks客户端，这里只说下windows下的配置方法，下载完之后运行，配置如下：</p>
+<p></p><p align="center"><img src="本地配置.png" alt="本地配置"></p><br>输入服务器的IP地址，还有和服务器端约定好的端口和密码，保持加密方式一致，点击确定，右键右下角图标开启系统代理，现在我们已经可以访问Google、Facebook、Twitter等网站了。手机端可以去Google Play下载影梭，配置方法同上。<p></p>
+<p></p><p align="center"><img src="google.png" alt="Google"></p><br>如果只是看看网页查查资料的话现在已经足够了，不过若是想上Youtube看高清视频仅仅这样还是不够的，接下来说下锐速的配置过程。<p></p>
+<h1 id="锐速加速"><a href="#锐速加速" class="headerlink" title="锐速加速"></a>锐速加速</h1><p>首先得确定我们的VPS究竟是采用了哪种虚拟化技术，openvz 还是 kvm 还是 xen 或者是 vmare，如果是openvz，那么很遗憾，锐速不支持openvz。具体查看方法之前试了好几种，感觉这种方法比较靠谱，执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># ifconfig</div></pre></td></tr></table></figure></p>
+<p>查看网卡信息，openvz的一般都是venet0:<em> ，xen、kvm的一般都是eth</em>。</p>
+<p></p><p align="left"><img src="网卡信息.png" alt="网卡信息"></p><br>然后查看系统内核信息，这个在我们每次登录服务器的欢迎界面就可以看到：<p></p>
+<p></p><p align="left"><img src="系统内核.png" alt="系统内核"></p><br>因为锐速对于某些版本的内核是不支持的，可以在<a href="https://www.91yun.org/serverspeeder91yun" target="_blank" rel="external">这里</a>查看自己的系统内核是否支持。<br>如果不支持的话就要更换系统内核了，更换系统内核的方法可以参考<a href="https://blessing.studio/ubuntu-14-04-change-kernel-to-install-serverspeeder/" target="_blank" rel="external">这篇教程</a>，这里不再赘述。<p></p>
+<p>假设现在你的系统内核已经可以支持锐速，那么执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh</div></pre></td></tr></table></figure></p>
+<p>如果内核完全匹配就会自动下载安装。</p>
+<p>接下来执行以下命令重启锐速：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># service serverSpeeder restart</div></pre></td></tr></table></figure></p>
+<p>配置完成。打开YouTube，随便点开一个视频：</p>
+<p></p><p align="center"><img src="YouTube.png" alt="YouTube"></p><br>720P,无压力。<p></p>
+<p>至此，全部配置过程完成。第一次正式写博客，居然写了这么长…<br><img src="亚丝娜.jpg" alt="亚丝娜"></p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E" target="_blank" rel="external">虚拟专用网</a><br><a href="https://zh.wikipedia.org/wiki/%E8%99%9B%E6%93%AC%E7%A7%81%E4%BA%BA%E7%B6%B2%E8%B7%AF" target="_blank" rel="external">防火长城</a><br><a href="http://www.people.virginia.edu/~tq7bw/vpn/" target="_blank" rel="external">建立自己的VPN服务器</a><br><a href="https://www.91yun.org/archives/683" target="_blank" rel="external">锐速破解版linux一键自动安装包</a><br><a href="https://www.freehao123.com/vps-ssh/" target="_blank" rel="external">Ubuntu 14.04 更换内核以安装锐速</a><br><a href="https://www.freehao123.com/vps-ssh/" target="_blank" rel="external">增强VPS安全</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">搭建Shadowsocks代理服务实现科学上网</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
+        <p><span>发布时间:</span>2017-03-05, 16:16:37</p>
+        <p><span>最后更新:</span>2017-03-12, 16:29:11</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/" title="搭建Shadowsocks代理服务实现科学上网">https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/01/08/新的开始/">
+                    新的开始
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关于GFW"><span class="toc-number">1.</span> <span class="toc-text">关于GFW</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IP封锁："><span class="toc-number">1.1.</span> <span class="toc-text">IP封锁：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS劫持和污染："><span class="toc-number">1.2.</span> <span class="toc-text">DNS劫持和污染：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关键字检测"><span class="toc-number">1.3.</span> <span class="toc-text">关键字检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于VPN"><span class="toc-number">2.</span> <span class="toc-text">关于VPN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于Socks5"><span class="toc-number">3.</span> <span class="toc-text">关于Socks5</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于Shadowsocks"><span class="toc-number">4.</span> <span class="toc-text">关于Shadowsocks</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于锐速"><span class="toc-number">5.</span> <span class="toc-text">关于锐速</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建过程"><span class="toc-number">6.</span> <span class="toc-text">搭建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建VPS"><span class="toc-number">6.1.</span> <span class="toc-text">创建VPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#登录并初始化"><span class="toc-number">6.2.</span> <span class="toc-text">登录并初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Socks5代理"><span class="toc-number">6.3.</span> <span class="toc-text">配置Socks5代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地代理配置"><span class="toc-number">6.4.</span> <span class="toc-text">本地代理配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#锐速加速"><span class="toc-number">7.</span> <span class="toc-text">锐速加速</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">7.0.1.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"搭建Shadowsocks代理服务实现科学上网　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <div id="comment-box" ></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/03/05/搭建Shadowsocks代理服务实现科学上网/" data-title="搭建Shadowsocks代理服务实现科学上网" data-url="https://forevas.github.io/2017/03/05/搭建Shadowsocks代理服务实现科学上网/"></div>
+    <script>
+        var duoshuoQuery = {short_name:"forevas"};
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            s.async = true; s.charset = 'UTF-8';
+            (d.head || d.body).appendChild(s);
+        }
+
+        
+    </script>
+    
+    <script> loadComment(); </script>
+
+</div>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/01/08/新的开始/" title="下一篇: 新的开始">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">搭建Shadowsocks代理服务实现科学上网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/08/新的开始/">新的开始</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Forevas
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
