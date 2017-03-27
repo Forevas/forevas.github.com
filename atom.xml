@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://forevas.github.io/"/>
-  <updated>2017-03-12T08:29:11.188Z</updated>
+  <updated>2017-03-27T15:31:36.487Z</updated>
   <id>https://forevas.github.io/</id>
   
   <author>
@@ -14,6 +14,55 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Windows下使用MinGW编译FFmpeg</title>
+    <link href="https://forevas.github.io/2017/03/20/Windows%E4%B8%8B%E4%BD%BF%E7%94%A8MinGW%E7%BC%96%E8%AF%91FFmpeg/"/>
+    <id>https://forevas.github.io/2017/03/20/Windows下使用MinGW编译FFmpeg/</id>
+    <published>2017-03-20T15:00:33.000Z</published>
+    <updated>2017-03-27T15:31:36.487Z</updated>
+    
+    <content type="html"><![CDATA[<p>在linux下编译FFmpeg很方便，但在Windows下还是有不少坑的，试了下使用Windows+MinGW编译FFmpeg，过程还是挺顺利的。记录一下(这里针对的平台是Android)。<br><a id="more"></a></p>
+<h1 id="下载FFmpeg源码"><a href="#下载FFmpeg源码" class="headerlink" title="下载FFmpeg源码"></a>下载FFmpeg源码</h1><p>首先，去<a href="http://ffmpeg.org/download.html" target="_blank" rel="external">FFmpeg官网</a>下载源码。</p>
+<p><img src="download_ffmpeg.png" alt="FFmpeg"></p>
+<p>然后解压至任意盘中，解压之后的目录如下。</p>
+<p><img src="unzip_ffmpeg.png" alt="Source"></p>
+<h1 id="NDK下载"><a href="#NDK下载" class="headerlink" title="NDK下载"></a>NDK下载</h1><p>下载NDK可以通过Android Studio自带的SDK管理工具来进行下载。也可以自行去<a href="https://developer.android.com/ndk/downloads/index.html?hl=zh-cn" target="_blank" rel="external">官网</a>下载解压。</p>
+<p><img src="NDK.png" alt="NDK"></p>
+<h1 id="MinGW下载配置"><a href="#MinGW下载配置" class="headerlink" title="MinGW下载配置"></a>MinGW下载配置</h1><p> MinGW - Minimalist GNU for Windows-是Windows下模拟Linux运行的库、头文件等的集合。我们编译FFmpeg源码需要用到它。</p>
+<p> 点击<a href="https://superb-dca2.dl.sourceforge.net/project/mingw/Installer/mingw-get-setup.exe" target="_blank" rel="external">这里</a>直接下载安装程序，安装过程时长视网速而定。</p>
+<p> 安装完成后，打开MinGW Installation Manager,选中Basic Setup，在右边的package中选中如下几项：</p>
+<p><img src="MinGW_config.png" alt="MinGW"></p>
+<p> 然后点击Installation-&gt;Apply Changes,过一会就ok了。</p>
+<p> 到这里，我们的准备工作已经完成了。</p>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>在之前FFmpeg解压后的文件夹中找到configure文件，将其中的这段代码：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SLIBNAME_WITH_MAJOR=&apos;$(SLIBNAME).$(LIBMAJOR)&apos;</div><div class="line">LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB) &quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;</div><div class="line">SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_VERSION)&apos;</div><div class="line">SLIB_INSTALL_LINKS=&apos;$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)&apos;</div></pre></td></tr></table></figure>
+<p> 替换为：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SLIBNAME_WITH_MAJOR=&apos;$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)&apos;</div><div class="line">LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB) &quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;</div><div class="line">SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_MAJOR)&apos;</div><div class="line">SLIB_INSTALL_LINKS=&apos;$(SLIBNAME)&apos;</div></pre></td></tr></table></figure></p>
+<p> 这段代码是控制将来编译生成so库的命名格式，如果按照原来的命名格式编译出来将会是libavcodec.so.57这样的格式，android不能识别，改过之后为libavcodec-57.so，这样就可以了。</p>
+<p> 然后在FFmpeg解压后的目录中新建build_android.sh文件，内容如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">NDK=D:/Android/sdk/ndk-bundle</div><div class="line">SYSROOT=$NDK/platforms/android-21/arch-arm/</div><div class="line">TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64</div><div class="line">function build_one</div><div class="line">&#123;</div><div class="line">./configure \</div><div class="line">    --prefix=$PREFIX \</div><div class="line">    --enable-shared \</div><div class="line">    --disable-static \</div><div class="line">    --disable-doc \</div><div class="line">    --disable-ffmpeg \</div><div class="line">    --disable-ffplay \</div><div class="line">    --disable-ffprobe \</div><div class="line">    --disable-ffserver \</div><div class="line">    --disable-avdevice \</div><div class="line">    --disable-doc \</div><div class="line">    --disable-symver \</div><div class="line">    --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \</div><div class="line">    --target-os=linux \</div><div class="line">    --arch=arm \</div><div class="line">    --enable-cross-compile \</div><div class="line">    --sysroot=$SYSROOT \</div><div class="line">    --extra-cflags=&quot;-Os -fpic $ADDI_CFLAGS&quot; \</div><div class="line">    --extra-ldflags=&quot;$ADDI_LDFLAGS&quot; \</div><div class="line">    $ADDITIONAL_CONFIGURE_FLAG</div><div class="line">make clean</div><div class="line">make</div><div class="line">make install</div><div class="line">&#125;</div><div class="line">CPU=arm</div><div class="line">PREFIX=$(pwd)/android/$CPU</div><div class="line">ADDI_CFLAGS=&quot;-marm&quot;</div><div class="line">build_one</div></pre></td></tr></table></figure></p>
+<p> 注意要把NDK的位置改为自己本地NDK的位置。然后双击运行 <strong>MinGW安装目录\msys\1.0\msys.bat</strong> 文件，启动MinGW命令行，切换到FFmpeg目录下，运行build_android.sh脚本，开始编译：</p>
+<p> <img src="compile.png" alt="compile"></p>
+<p> 编译过程有点慢，这个跟电脑的速度有关。大概半小时后，编译完成，FFmpeg目录下多了一个android文件夹：</p>
+<p> <img src="android.png" alt="android"></p>
+<p> 打开android-&gt;arm-&gt;lib:</p>
+<p> <img src="finish.png" alt="finish"></p>
+<p>编译成功。至于集成到Android平台，可以查阅官方API文档，通过JNI方式调用相关接口即可。</p>
+<p>FFmpeg功能十分强大，很多音视频处理的工作都会用到它，以后还需要深入研究。</p>
+<p><img src="girl.jpg" alt="萌妹子"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在linux下编译FFmpeg很方便，但在Windows下还是有不少坑的，试了下使用Windows+MinGW编译FFmpeg，过程还是挺顺利的。记录一下(这里针对的平台是Android)。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="FFmpeg" scheme="https://forevas.github.io/tags/FFmpeg/"/>
+    
+      <category term="MinGW" scheme="https://forevas.github.io/tags/MinGW/"/>
+    
+  </entry>
   
   <entry>
     <title>搭建Shadowsocks代理服务实现科学上网</title>
