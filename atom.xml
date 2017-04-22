@@ -207,11 +207,9 @@
     <link href="https://forevas.github.io/2017/01/08/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
     <id>https://forevas.github.io/2017/01/08/新的开始/</id>
     <published>2017-01-08T15:05:14.000Z</published>
-    <updated>2017-03-09T13:27:01.942Z</updated>
+    <updated>2017-04-22T14:53:29.127Z</updated>
     
-    <content type="html"><![CDATA[<p>这是<strong>新的开始</strong>，我用hexo创建了第一篇文章。<br><a id="more"></a></p>
-<p>之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。</p>
-<p>下面是一些常用的语法：</p>
+    <content type="html"><![CDATA[<p>之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。<br><a id="more"></a><br>下面是一些常用的语法：</p>
 <h1 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h1><p>在文章中插入引言，可包含作者、来源和标题。</p>
 <h2 id="别号：-quote"><a href="#别号：-quote" class="headerlink" title="别号： quote"></a>别号： quote</h2><blockquote><p>content</p>
 <footer><strong>[author[</strong><cite>source]] [link] [source_link_title]</cite></footer></blockquote>
@@ -255,7 +253,7 @@ content
     
     <summary type="html">
     
-      &lt;p&gt;这是&lt;strong&gt;新的开始&lt;/strong&gt;，我用hexo创建了第一篇文章。&lt;br&gt;
+      &lt;p&gt;之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。&lt;br&gt;
     
     </summary>
     
