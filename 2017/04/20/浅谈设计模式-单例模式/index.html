@@ -15,19 +15,16 @@
 
 
 
-<meta name="description" content="这是新的开始，我用hexo创建了第一篇文章。">
+<meta name="description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="新的开始">
-<meta property="og:url" content="https://forevas.github.io/2017/01/08/新的开始/index.html">
+<meta property="og:title" content="浅谈设计模式-单例模式">
+<meta property="og:url" content="https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/index.html">
 <meta property="og:site_name" content="厚德载物，追求卓越">
-<meta property="og:description" content="这是新的开始，我用hexo创建了第一篇文章。">
-<meta property="og:image" content="https://forevas.github.io/path/to/image">
-<meta property="og:image" content="https://forevas.github.io/saber.jpg">
-<meta property="og:updated_time" content="2017-03-09T13:27:01.942Z">
+<meta property="og:description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
+<meta property="og:updated_time" content="2017-04-22T14:43:45.831Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新的开始">
-<meta name="twitter:description" content="这是新的开始，我用hexo创建了第一篇文章。">
-<meta name="twitter:image" content="https://forevas.github.io/path/to/image">
+<meta name="twitter:title" content="浅谈设计模式-单例模式">
+<meta name="twitter:description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -59,7 +56,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>新的开始 | 厚德载物，追求卓越</title>
+<title>浅谈设计模式-单例模式 | 厚德载物，追求卓越</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -275,11 +272,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-新的开始" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-浅谈设计模式-单例模式" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/01/08/新的开始/" class="article-date">
-      <time datetime="2017-01-08T15:05:14.000Z" itemprop="datePublished">2017-01-08</time>
+      <a href="/2017/04/20/浅谈设计模式-单例模式/" class="article-date">
+      <time datetime="2017-04-20T14:29:47.000Z" itemprop="datePublished">2017-04-20</time>
 </a>
 
 
@@ -294,7 +291,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      新的开始
+      浅谈设计模式-单例模式
     </h1>
   
 
@@ -305,7 +302,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -315,48 +312,20 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>这是<strong>新的开始</strong>，我用hexo创建了第一篇文章。<br><a id="more"></a></p>
-<p>之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。</p>
-<p>下面是一些常用的语法：</p>
-<h1 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h1><p>在文章中插入引言，可包含作者、来源和标题。</p>
-<h2 id="别号：-quote"><a href="#别号：-quote" class="headerlink" title="别号： quote"></a>别号： quote</h2><blockquote><p>content</p>
-<footer><strong>[author[</strong><cite>source]] [link] [source_link_title]</cite></footer></blockquote>
-<h2 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h2><p>没有提供参数，则只输出普通的 blockquote<br><blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque hendrerit lacus ut purus iaculis feugiat. Sed nec tempor elit, quis aliquam neque. Curabitur sed diam eget dolor fermentum semper at eu lorem.</p>
-</blockquote></p>
-<h2 id="引用书上的句子"><a href="#引用书上的句子" class="headerlink" title="引用书上的句子"></a>引用书上的句子</h2><blockquote><p>Do not just seek happiness for yourself. Seek happiness for all. Through kindness. Through mercy.</p>
-<footer><strong>David Levithan</strong><cite>Wide Awake</cite></footer></blockquote>
-<h2 id="引用-Twitter"><a href="#引用-Twitter" class="headerlink" title="引用 Twitter"></a>引用 Twitter</h2><blockquote><p>NEW: DevDocs now comes with syntax highlighting. <a href="http://devdocs.io" target="_blank" rel="external">http://devdocs.io</a></p>
-<footer><strong>@DevDocs</strong><cite><a href="https://twitter.com/devdocs/status/356095192085962752" target="_blank" rel="external">twitter.com/devdocs/status/356095192085962752</a></cite></footer></blockquote>
-<h2 id="引用网络上的文章"><a href="#引用网络上的文章" class="headerlink" title="引用网络上的文章"></a>引用网络上的文章</h2><blockquote><p>Every interaction is both precious and an opportunity to delight.</p>
-<footer><strong>Seth Godin</strong><cite><a href="http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html" target="_blank" rel="external">Welcome to Island Marketing</a></cite></footer></blockquote>
-<h1 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h1><p>在文章中插入代码。<br>别名： code<br><figure class="highlight plain"><figcaption><span>[title] [] [url] [link text]</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">code snippet</div></pre></td></tr></table></figure></p>
-<h2 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h2><p>普通的代码块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alert(&apos;Hello World!&apos;);</div></pre></td></tr></table></figure><br>指定语言<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[rectangle setX: <span class="number">10</span> y: <span class="number">10</span> width: <span class="number">20</span> height: <span class="number">20</span>];</div></pre></td></tr></table></figure><br>附加说明<br><figure class="highlight plain"><figcaption><span>Array.map</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.map(callback[, thisArg])</div></pre></td></tr></table></figure><br>附加说明和网址<br><figure class="highlight plain"><figcaption><span>_.compact</span><a href="http://underscorejs.org/#compact" target="_blank" rel="external">Underscore.js</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_.compact([0, 1, false, 2, &apos;&apos;, 3]);</div><div class="line">=&gt; [1, 2, 3]</div></pre></td></tr></table></figure></p>
-<h1 id="反引号代码块"><a href="#反引号代码块" class="headerlink" title="反引号代码块"></a>反引号代码块</h1><p>另一种形式的代码块，不同的是它使用三个反引号来包裹。</p>
-<p><code>[language] [title] [url] [link text] code snippet</code></p>
-<h1 id="Pull-Quote"><a href="#Pull-Quote" class="headerlink" title="Pull Quote"></a>Pull Quote</h1><p>在文章中插入 Pull quote。<br><blockquote class="pullquote [class]"><p>content</p>
-</blockquote></p>
-<h1 id="jsFiddle"><a href="#jsFiddle" class="headerlink" title="jsFiddle"></a>jsFiddle</h1><p>在文章中嵌入 jsFiddle。<br><iframe scrolling="no" width="[width]" height="[height]" src="http://jsfiddle.net/shorttag/embedded/[tabs]/[skin]" frameborder="0" allowfullscreen></iframe></p>
-<h1 id="Gist"><a href="#Gist" class="headerlink" title="Gist"></a>Gist</h1><p>在文章中嵌入 Gist。<br><script src="//gist.github.com/gist_id.js?file=[filename]"></script></p>
-<h1 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h1><p>在文章中插入 iframe。<br><iframe src="url" width="[width]" height="[height]" frameborder="0" allowfullscreen></iframe></p>
-<h1 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h1><p>在文章中插入指定大小的图片。<br><img src="/path/to/image" class="[class names]" title="[width] [height] [title text [alt text]]"></p>
-<h1 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h1><p>在文章中插入链接，并自动给外部链接添加 target=”_blank” 属性。<br><a>text url [external] [title]</a></p>
-<h1 id="Include-Code"><a href="#Include-Code" class="headerlink" title="Include Code"></a>Include Code</h1><p>插入 source 文件夹内的代码文件。<br></p>
-<h1 id="Youtube"><a href="#Youtube" class="headerlink" title="Youtube"></a>Youtube</h1><p>在文章中插入 Youtube 视频。<br><div class="video-container"><iframe src="//www.youtube.com/embed/video_id" frameborder="0" allowfullscreen></iframe></div></p>
-<h1 id="Vimeo"><a href="#Vimeo" class="headerlink" title="Vimeo"></a>Vimeo</h1><p>在文章中插入 Vimeo 视频。<br><div class="video-container"><iframe src="//player.vimeo.com/video/video_id" frameborder="0" allowfullscreen></iframe></div></p>
-<h1 id="引用文章"><a href="#引用文章" class="headerlink" title="引用文章"></a>引用文章</h1><p>引用其他文章的链接。<br><br></p>
-<h1 id="引用资源"><a href="#引用资源" class="headerlink" title="引用资源"></a>引用资源</h1><p>引用文章的资源。<br><br><br></p>
-<h1 id="Raw"><a href="#Raw" class="headerlink" title="Raw"></a>Raw</h1><p>如果您想在文章中插入 Swig 标签，可以尝试使用 Raw 标签，以免发生解析异常。<br>
-content
-</p>
-<blockquote>
-<p>Every interaction is both precious and an opportunity to delight.</p>
-</blockquote>
-<h1 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h1><p>$$J_\alpha(x)=\sum _{m=0}^\infty \frac{(-1)^ m}{m! \, \Gamma (m + \alpha + 1)}{\left({\frac{x}{2}}\right)}^{2 m + \alpha }$$</p>
-<h1 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h1><p align="center"><font size="6">我是居中变大的字</font></p>
-
-<p>比较了一下，感觉Markdown语法和swing语法混合使用体验最好，各取所长吧。</p>
-<p><img src="saber.jpg" alt="saber"></p>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo文档</a><br><a href="http://www.appinn.com/markdown/" target="_blank" rel="external">Markdown语法</a></p>
+        <p>最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。<br><a id="more"></a><br>谈到设计模式，大家肯定最先想到的是单例，毕竟大多数人学习设计模式最先接触的就是单例模式。在平时的软件设计中，单例也占据很重要的地位，例如一个APP中用户个人信息就可以使用单例来进行维护等等。接下来就说说我对于单例的理解。</p>
+<p>单例的实现方式有很多种，个人看来，不管怎么变，都离不开以下四种方式。</p>
+<h2 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 饿汉模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_3 &#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>饿汉式简单易懂，不过在类初始化的时候就会被实例化，但可能此时并没有用到它，比较浪费内存。</p>
+<h2 id="饱汉式（双重校验锁）"><a href="#饱汉式（双重校验锁）" class="headerlink" title="饱汉式（双重校验锁）"></a>饱汉式（双重校验锁）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 饱汉模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_4 &#123;</div><div class="line">	private static Singleton_4 singleton;</div><div class="line"></div><div class="line">	private Singleton_4() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_4 getInstance() &#123;</div><div class="line">		if (singleton == null) &#123;</div><div class="line">			synchronized (Singleton_4.class) &#123;</div><div class="line">				if (singleton == null) &#123;</div><div class="line">					singleton = new Singleton_4();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>饱汉式实现了lazyload，但是考虑到线程安全和效率问题还是要使用双重校验锁来实现。</p>
+<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 静态内部类模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_1 &#123;</div><div class="line">	private Singleton_1() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	private static class SingletonHolder &#123;</div><div class="line">		private static final Singleton_1 singleton = new Singleton_1();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static final Singleton_1 getInstance() &#123;</div><div class="line">		return SingletonHolder.singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>静态内部类也实现了lazyload，不过它的优点在于避免了线程锁的校验，效率比较高，综合来看，比前两种方式都要好。</p>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 枚举实现</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public enum Singleton_2 &#123;</div><div class="line">	INSTANCE;</div><div class="line">	public void whatEverYouWant() &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>枚举实现单例应该是最简单的了吧，而且枚举实现的单例无法被破坏，个人感觉实现单例的最佳方式。</p>
+<h2 id="问题和对策"><a href="#问题和对策" class="headerlink" title="问题和对策"></a>问题和对策</h2><p>前三种方法通过反射、序列化和克隆均可以破坏其单例性，具体破坏代码的实现就不再赘述，大家可以自己试一试，这里只针对这几种破坏单例的方式给出对策。就拿第一种单例实现方式来举例吧。<br>避免单例被反射破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 &#123;</div><div class="line">	private static boolean flag = false;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">		synchronized (Singleton_3.class) &#123;//加锁是为了防止多个线程同时利用反射进行实例的创建时产生的问题</div><div class="line">			if (!flag) &#123;</div><div class="line">				flag = true;</div><div class="line">			&#125; else &#123;</div><div class="line">				throw new RuntimeException(&quot;单例模式被破坏...&quot;);//利用反射创建实例的时候直接抛出异常</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>避免单例被序列化破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 implements Serializable&#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">	private Object readResolve() &#123;</div><div class="line">		return singleton;//在其反序列化的时候直接返回已存在的单例</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>避免单例被克隆破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 implements Cloneable&#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	protected Object clone() throws CloneNotSupportedException &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		return singleton;//覆写clone()方法，直接返回已存在的单例</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于单例，就说这么多吧。</p>
 
       
     </div>
@@ -365,13 +334,13 @@ content
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/01/08/新的开始/">新的开始</a></p>
+        <p><span>本文标题:</span><a href="/2017/04/20/浅谈设计模式-单例模式/">浅谈设计模式-单例模式</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
-        <p><span>发布时间:</span>2017-01-08, 23:05:14</p>
-        <p><span>最后更新:</span>2017-03-09, 21:27:01</p>
+        <p><span>发布时间:</span>2017-04-20, 22:29:47</p>
+        <p><span>最后更新:</span>2017-04-22, 22:43:45</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/01/08/新的开始/" title="新的开始">https://forevas.github.io/2017/01/08/新的开始/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/01/08/新的开始/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/04/20/浅谈设计模式-单例模式/" title="浅谈设计模式-单例模式">https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -383,16 +352,10 @@ content
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">
-                    搭建Shadowsocks代理服务实现科学上网
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/01/02/hello-world/">
-                    Hello World
+                <a href="/2017/03/20/Windows下使用MinGW编译FFmpeg/">
+                    Windows下使用MinGW编译FFmpeg
                 </a>
             </div>
         
@@ -404,7 +367,7 @@ content
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引用块"><span class="toc-number">1.</span> <span class="toc-text">引用块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#别号：-quote"><span class="toc-number">1.1.</span> <span class="toc-text">别号： quote</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#样例"><span class="toc-number">1.2.</span> <span class="toc-text">样例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用书上的句子"><span class="toc-number">1.3.</span> <span class="toc-text">引用书上的句子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用-Twitter"><span class="toc-number">1.4.</span> <span class="toc-text">引用 Twitter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用网络上的文章"><span class="toc-number">1.5.</span> <span class="toc-text">引用网络上的文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码块"><span class="toc-number">2.</span> <span class="toc-text">代码块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#样例-1"><span class="toc-number">2.1.</span> <span class="toc-text">样例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反引号代码块"><span class="toc-number">3.</span> <span class="toc-text">反引号代码块</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pull-Quote"><span class="toc-number">4.</span> <span class="toc-text">Pull Quote</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jsFiddle"><span class="toc-number">5.</span> <span class="toc-text">jsFiddle</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gist"><span class="toc-number">6.</span> <span class="toc-text">Gist</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iframe"><span class="toc-number">7.</span> <span class="toc-text">iframe</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Image"><span class="toc-number">8.</span> <span class="toc-text">Image</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Link"><span class="toc-number">9.</span> <span class="toc-text">Link</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Include-Code"><span class="toc-number">10.</span> <span class="toc-text">Include Code</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Youtube"><span class="toc-number">11.</span> <span class="toc-text">Youtube</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Vimeo"><span class="toc-number">12.</span> <span class="toc-text">Vimeo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用文章"><span class="toc-number">13.</span> <span class="toc-text">引用文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用资源"><span class="toc-number">14.</span> <span class="toc-text">引用资源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Raw"><span class="toc-number">15.</span> <span class="toc-text">Raw</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#公式"><span class="toc-number">16.</span> <span class="toc-text">公式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字体"><span class="toc-number">17.</span> <span class="toc-text">字体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">17.0.1.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#饿汉式"><span class="toc-number">1.</span> <span class="toc-text">饿汉式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#饱汉式（双重校验锁）"><span class="toc-number">2.</span> <span class="toc-text">饱汉式（双重校验锁）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态内部类"><span class="toc-number">3.</span> <span class="toc-text">静态内部类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举"><span class="toc-number">4.</span> <span class="toc-text">枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题和对策"><span class="toc-number">5.</span> <span class="toc-text">问题和对策</span></a></li></ol>
         
     </div>
     <style>
@@ -440,7 +403,7 @@ content
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"新的开始　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"浅谈设计模式-单例模式　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -456,7 +419,7 @@ content
     
       <div class="duoshuo" id="comments">
     <div id="comment-box" ></div>
-    <div class="ds-thread" id="ds-thread" data-thread-key="2017/01/08/新的开始/" data-title="新的开始" data-url="https://forevas.github.io/2017/01/08/新的开始/"></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/04/20/浅谈设计模式-单例模式/" data-title="浅谈设计模式-单例模式" data-url="https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/"></div>
     <script>
         var duoshuoQuery = {short_name:"forevas"};
         var loadComment = function(){
@@ -479,15 +442,13 @@ content
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/" title="上一篇: 搭建Shadowsocks代理服务实现科学上网">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/01/02/hello-world/" title="下一篇: Hello World">
+            <a href="/2017/03/20/Windows下使用MinGW编译FFmpeg/" title="下一篇: Windows下使用MinGW编译FFmpeg">
                 <i class="fa fa-angle-right"></i>
             </a>
         
