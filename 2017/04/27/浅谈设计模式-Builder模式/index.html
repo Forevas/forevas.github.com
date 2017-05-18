@@ -15,16 +15,18 @@
 
 
 
-<meta name="description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
+<meta name="description" content="当我们去设计一个比较简单的类的构造方式时，一般情况下，直接重载几个不同参数的构造方法即可。但当类的成员变量比较多的时候，可能某些成员变量是必要的，某些又是可选的。有些是创建的时候需要传入的，有些又是对象创建完成之后才传的。这样的话重载构造方法的方式就会让人感到很迷茫，必须写一大堆注释来进行说明。这个时候，用Builder模式来进行对象的构建是十分合理的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅谈设计模式-单例模式">
-<meta property="og:url" content="https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/index.html">
+<meta property="og:title" content="浅谈设计模式-Builder模式">
+<meta property="og:url" content="https://forevas.github.io/2017/04/27/浅谈设计模式-Builder模式/index.html">
 <meta property="og:site_name" content="厚德载物，追求卓越">
-<meta property="og:description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
-<meta property="og:updated_time" content="2017-05-18T14:36:50.059Z">
+<meta property="og:description" content="当我们去设计一个比较简单的类的构造方式时，一般情况下，直接重载几个不同参数的构造方法即可。但当类的成员变量比较多的时候，可能某些成员变量是必要的，某些又是可选的。有些是创建的时候需要传入的，有些又是对象创建完成之后才传的。这样的话重载构造方法的方式就会让人感到很迷茫，必须写一大堆注释来进行说明。这个时候，用Builder模式来进行对象的构建是十分合理的。">
+<meta property="og:image" content="https://forevas.github.io/Builder.jpg">
+<meta property="og:updated_time" content="2017-05-18T14:33:20.139Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅谈设计模式-单例模式">
-<meta name="twitter:description" content="最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。">
+<meta name="twitter:title" content="浅谈设计模式-Builder模式">
+<meta name="twitter:description" content="当我们去设计一个比较简单的类的构造方式时，一般情况下，直接重载几个不同参数的构造方法即可。但当类的成员变量比较多的时候，可能某些成员变量是必要的，某些又是可选的。有些是创建的时候需要传入的，有些又是对象创建完成之后才传的。这样的话重载构造方法的方式就会让人感到很迷茫，必须写一大堆注释来进行说明。这个时候，用Builder模式来进行对象的构建是十分合理的。">
+<meta name="twitter:image" content="https://forevas.github.io/Builder.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -56,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>浅谈设计模式-单例模式 | 厚德载物，追求卓越</title>
+<title>浅谈设计模式-Builder模式 | 厚德载物，追求卓越</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -272,11 +274,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-浅谈设计模式-单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-浅谈设计模式-Builder模式" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/04/20/浅谈设计模式-单例模式/" class="article-date">
-      <time datetime="2017-04-20T14:29:47.000Z" itemprop="datePublished">2017-04-20</time>
+      <a href="/2017/04/27/浅谈设计模式-Builder模式/" class="article-date">
+      <time datetime="2017-04-27T14:18:31.000Z" itemprop="datePublished">2017-04-27</time>
 </a>
 
 
@@ -291,7 +293,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      浅谈设计模式-单例模式
+      浅谈设计模式-Builder模式
     </h1>
   
 
@@ -312,20 +314,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>最近一段时间都没有写博客，感觉自己变懒了，这几天反省了一下，决定写点什么，想了想，准备写一下自己对于设计模式的理解。设计模式的思想对于代码的解耦和灵活性有很大的帮助，尤其是项目做的越来越大的时候，合理的使用设计模式的思想来进行代码结构的设计有利于以后的的扩展和维护。<br><a id="more"></a><br>谈到设计模式，大家肯定最先想到的是单例，毕竟大多数人学习设计模式最先接触的就是单例模式。在平时的软件设计中，单例也占据很重要的地位，例如一个APP中用户个人信息就可以使用单例来进行维护等等。接下来就说说我对于单例的理解。</p>
-<p>单例的实现方式有很多种，个人看来，不管怎么变，都离不开以下四种方式。</p>
-<h2 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 饿汉模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_3 &#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>饿汉式简单易懂，不过在类初始化的时候就会被实例化，但可能此时并没有用到它，比较浪费内存。</p>
-<h2 id="饱汉式（双重校验锁）"><a href="#饱汉式（双重校验锁）" class="headerlink" title="饱汉式（双重校验锁）"></a>饱汉式（双重校验锁）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 饱汉模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_4 &#123;</div><div class="line">	private static volatile Singleton_4 singleton;</div><div class="line"></div><div class="line">	private Singleton_4() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_4 getInstance() &#123;</div><div class="line">		if (singleton == null) &#123;</div><div class="line">			synchronized (Singleton_4.class) &#123;</div><div class="line">				if (singleton == null) &#123;</div><div class="line">					singleton = new Singleton_4();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>饱汉式实现了lazyload，但是考虑到线程安全和效率问题还是要使用双重校验锁来实现。注意这里单例要加上volatile关键字，否则可能会造成双重校验锁失效问题。</p>
-<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 静态内部类模式</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public class Singleton_1 &#123;</div><div class="line">	private Singleton_1() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	private static class SingletonHolder &#123;</div><div class="line">		private static final Singleton_1 singleton = new Singleton_1();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static final Singleton_1 getInstance() &#123;</div><div class="line">		return SingletonHolder.singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>静态内部类也实现了lazyload，不过它的优点在于避免了线程锁的校验，效率比较高，综合来看，比前两种方式都要好。</p>
-<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 枚举实现</div><div class="line"> *</div><div class="line"> * @author Administrator</div><div class="line"> *</div><div class="line"> */</div><div class="line">public enum Singleton_2 &#123;</div><div class="line">	INSTANCE;</div><div class="line">	public void whatEverYouWant() &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>枚举实现单例应该是最简单的了吧，而且枚举实现的单例无法被破坏，个人感觉实现单例的最佳方式。</p>
-<h2 id="问题和对策"><a href="#问题和对策" class="headerlink" title="问题和对策"></a>问题和对策</h2><p>前三种方法通过反射、序列化和克隆均可以破坏其单例性，具体破坏代码的实现就不再赘述，大家可以自己试一试，这里只针对这几种破坏单例的方式给出对策。就拿第一种单例实现方式来举例吧。<br>避免单例被反射破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 &#123;</div><div class="line">	private static boolean flag = false;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">		synchronized (Singleton_3.class) &#123;//加锁是为了防止多个线程同时利用反射进行实例的创建时产生的问题</div><div class="line">			if (!flag) &#123;</div><div class="line">				flag = true;</div><div class="line">			&#125; else &#123;</div><div class="line">				throw new RuntimeException(&quot;单例模式被破坏...&quot;);//利用反射创建实例的时候直接抛出异常</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>避免单例被序列化破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 implements Serializable&#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">	private Object readResolve() &#123;</div><div class="line">		return singleton;//在其反序列化的时候直接返回已存在的单例</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>避免单例被克隆破坏：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class Singleton_3 implements Cloneable&#123;</div><div class="line">	private static final Singleton_3 singleton = new Singleton_3();</div><div class="line"></div><div class="line">	private Singleton_3() &#123;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	public static Singleton_3 getInstance() &#123;</div><div class="line">		return singleton;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	protected Object clone() throws CloneNotSupportedException &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		return singleton;//覆写clone()方法，直接返回已存在的单例</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>关于单例，就说这么多吧。</p>
+        <p>当我们去设计一个比较简单的类的构造方式时，一般情况下，直接重载几个不同参数的构造方法即可。但当类的成员变量比较多的时候，可能某些成员变量是必要的，某些又是可选的。有些是创建的时候需要传入的，有些又是对象创建完成之后才传的。这样的话重载构造方法的方式就会让人感到很迷茫，必须写一大堆注释来进行说明。这个时候，用Builder模式来进行对象的构建是十分合理的。<br><a id="more"></a><br>Builder模式将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。<br>下面是标准Builder模式的类图。<br><img src="Builder.jpg" alt="Builder模式"><br>我们在实际使用中往往使用的是改造过的Builder模式，经常会省略掉Director,直接在代码中使用Builder模式来创建对象，在这里我们自己充当了Director的角色。下面自己来实现一个最简单的Builder模式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">public class Person &#123;</div><div class="line">	private String id;</div><div class="line">	private String name;</div><div class="line">	private String sex;</div><div class="line">	private int age;</div><div class="line">	private String phoneNumber;</div><div class="line">	private String email;</div><div class="line">	private String address;</div><div class="line">	private String occupation;</div><div class="line"></div><div class="line">	private Person(Builder builder) &#123;</div><div class="line">		this.id = builder.id;</div><div class="line">		this.name = builder.name;</div><div class="line">		this.sex = builder.sex;</div><div class="line">		this.age = builder.age;</div><div class="line">		this.phoneNumber = builder.phoneNumber;</div><div class="line">		this.email = builder.email;</div><div class="line">		this.address = builder.address;</div><div class="line">		this.occupation = builder.occupation;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	static class Builder &#123;</div><div class="line">		private String id;</div><div class="line">		private String name;</div><div class="line">		private String sex;</div><div class="line">		private int age;</div><div class="line">		private String phoneNumber;</div><div class="line">		private String email;</div><div class="line">		private String address;</div><div class="line">		private String occupation;</div><div class="line"></div><div class="line">		public Builder(String id, String name, String sex, int age) &#123;</div><div class="line">			this.id = id;</div><div class="line">			this.name = name;</div><div class="line">			this.sex = sex;</div><div class="line">			this.age = age;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		public Builder setPhoneNumber(String phoneNumber) &#123;</div><div class="line">			this.phoneNumber = phoneNumber;</div><div class="line">			return this;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		public Builder setEmail(String email) &#123;</div><div class="line">			this.email = email;</div><div class="line">			return this;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		public Builder setAddress(String address) &#123;</div><div class="line">			this.address = address;</div><div class="line">			return this;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		public Builder setOccupation(String occupation) &#123;</div><div class="line">			this.occupation = occupation;</div><div class="line">			return this;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		public Person build() &#123;</div><div class="line">			return new Person(this);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class TestBuilder &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		Person person = new Person.Builder(&quot;xxx&quot;, &quot;Faker&quot;, &quot;man&quot;, 22)</div><div class="line">				.setAddress(&quot;Korea&quot;).setEmail(&quot;xxx@gmail.com&quot;)</div><div class="line">				.setOccupation(&quot;lol&quot;).setPhoneNumber(&quot;12345678901&quot;).build();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的例子很直观的反映出了Builder模式的核心内容，当我们想要创建Person对象时，哪些参数是必须的，哪些是可选的，一目了然。而且链式的调用方式可读性更佳。<br>在Android中最常见的Builder模式就是AlertDialog了吧，在平时的编码中经常打交道。还有开源框架okhttp也大量使用了Builder模式，相信用过的人肯定深有感触。</p>
 
       
     </div>
@@ -334,13 +326,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/04/20/浅谈设计模式-单例模式/">浅谈设计模式-单例模式</a></p>
+        <p><span>本文标题:</span><a href="/2017/04/27/浅谈设计模式-Builder模式/">浅谈设计模式-Builder模式</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
-        <p><span>发布时间:</span>2017-04-20, 22:29:47</p>
-        <p><span>最后更新:</span>2017-05-18, 22:36:50</p>
+        <p><span>发布时间:</span>2017-04-27, 22:18:31</p>
+        <p><span>最后更新:</span>2017-05-18, 22:33:20</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/04/20/浅谈设计模式-单例模式/" title="浅谈设计模式-单例模式">https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/04/27/浅谈设计模式-Builder模式/" title="浅谈设计模式-Builder模式">https://forevas.github.io/2017/04/27/浅谈设计模式-Builder模式/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/04/27/浅谈设计模式-Builder模式/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -352,16 +344,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/04/27/浅谈设计模式-Builder模式/">
-                    浅谈设计模式-Builder模式
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/03/20/Windows下使用MinGW编译FFmpeg/">
-                    Windows下使用MinGW编译FFmpeg
+                <a href="/2017/04/20/浅谈设计模式-单例模式/">
+                    浅谈设计模式-单例模式
                 </a>
             </div>
         
@@ -373,7 +359,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#饿汉式"><span class="toc-number">1.</span> <span class="toc-text">饿汉式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#饱汉式（双重校验锁）"><span class="toc-number">2.</span> <span class="toc-text">饱汉式（双重校验锁）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态内部类"><span class="toc-number">3.</span> <span class="toc-text">静态内部类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举"><span class="toc-number">4.</span> <span class="toc-text">枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题和对策"><span class="toc-number">5.</span> <span class="toc-text">问题和对策</span></a></li></ol>
+            
         
     </div>
     <style>
@@ -409,7 +395,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"浅谈设计模式-单例模式　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"浅谈设计模式-Builder模式　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -425,7 +411,7 @@
     
       <div class="duoshuo" id="comments">
     <div id="comment-box" ></div>
-    <div class="ds-thread" id="ds-thread" data-thread-key="2017/04/20/浅谈设计模式-单例模式/" data-title="浅谈设计模式-单例模式" data-url="https://forevas.github.io/2017/04/20/浅谈设计模式-单例模式/"></div>
+    <div class="ds-thread" id="ds-thread" data-thread-key="2017/04/27/浅谈设计模式-Builder模式/" data-title="浅谈设计模式-Builder模式" data-url="https://forevas.github.io/2017/04/27/浅谈设计模式-Builder模式/"></div>
     <script>
         var duoshuoQuery = {short_name:"forevas"};
         var loadComment = function(){
@@ -448,15 +434,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/04/27/浅谈设计模式-Builder模式/" title="上一篇: 浅谈设计模式-Builder模式">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/03/20/Windows下使用MinGW编译FFmpeg/" title="下一篇: Windows下使用MinGW编译FFmpeg">
+            <a href="/2017/04/20/浅谈设计模式-单例模式/" title="下一篇: 浅谈设计模式-单例模式">
                 <i class="fa fa-angle-right"></i>
             </a>
         
