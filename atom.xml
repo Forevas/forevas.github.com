@@ -78,7 +78,7 @@
     <link href="https://forevas.github.io/2017/03/20/Windows%E4%B8%8B%E4%BD%BF%E7%94%A8MinGW%E7%BC%96%E8%AF%91FFmpeg/"/>
     <id>https://forevas.github.io/2017/03/20/Windows下使用MinGW编译FFmpeg/</id>
     <published>2017-03-20T15:00:33.000Z</published>
-    <updated>2017-03-27T15:31:36.487Z</updated>
+    <updated>2017-08-21T13:56:41.221Z</updated>
     
     <content type="html"><![CDATA[<p>在linux下编译FFmpeg很方便，但在Windows下还是有不少坑的，试了下使用Windows+MinGW编译FFmpeg，过程还是挺顺利的。记录一下(这里针对的平台是Android)。<br><a id="more"></a></p>
 <h1 id="下载FFmpeg源码"><a href="#下载FFmpeg源码" class="headerlink" title="下载FFmpeg源码"></a>下载FFmpeg源码</h1><p>首先，去<a href="http://ffmpeg.org/download.html" target="_blank" rel="external">FFmpeg官网</a>下载源码。</p>
@@ -231,9 +231,9 @@
     <link href="https://forevas.github.io/2017/01/08/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
     <id>https://forevas.github.io/2017/01/08/新的开始/</id>
     <published>2017-01-08T15:05:14.000Z</published>
-    <updated>2017-04-22T14:53:29.127Z</updated>
+    <updated>2017-08-22T15:19:40.404Z</updated>
     
-    <content type="html"><![CDATA[<p>之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。<br><a id="more"></a><br>下面是一些常用的语法：</p>
+    <content type="html"><![CDATA[<p>之前看到很多个人博客，不仅内容优秀，而且布局精美。所以一直想着自己也搞一个个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去做。好在最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。<br><a id="more"></a><br>下面是一些常用的语法：</p>
 <h1 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h1><p>在文章中插入引言，可包含作者、来源和标题。</p>
 <h2 id="别号：-quote"><a href="#别号：-quote" class="headerlink" title="别号： quote"></a>别号： quote</h2><blockquote><p>content</p>
 <footer><strong>[author[</strong><cite>source]] [link] [source_link_title]</cite></footer></blockquote>
@@ -277,7 +277,7 @@ content
     
     <summary type="html">
     
-      &lt;p&gt;之前看到好多个人博客，一直为其优质的内容，精美的布局所震撼。所以一直憧憬着拥有自己的个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去搞。终于最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。&lt;br&gt;
+      &lt;p&gt;之前看到很多个人博客，不仅内容优秀，而且布局精美。所以一直想着自己也搞一个个人博客，奈何因为工作原因和自己比较懒，一直没有下决心去做。好在最近发现了hexo，其简洁性和实用性深深地吸引了我，历经N久的瞎折腾，个人博客终于搭建好了，看着自己的劳动成果，感觉自己花费的时间也没有白费。下定决心，从今天开始，开始写博客。&lt;br&gt;
     
     </summary>
     
