@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Forevas" />
+
+
+
+<meta name="description" content="一直以来，对于JVM的内部结构不是很清楚，最近看了一篇博客，写的很好，这里简单总结下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM内存模型">
+<meta property="og:url" content="https://forevas.github.io/2017/09/29/JVM内存模型/index.html">
+<meta property="og:site_name" content="厚德载物，追求卓越">
+<meta property="og:description" content="一直以来，对于JVM的内部结构不是很清楚，最近看了一篇博客，写的很好，这里简单总结下。">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/852D185478C24971B0D3A17D930F399F?method=download&shareKey=0dd3183138a5773fd7d8065c2eaec3b3">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/9915DABBF48E4016A2C20B8D00279548?method=download&shareKey=5a6407200b93ab521ea17f2681a83b2b">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/09EFE46F567C4E08B56863700FB4D1EE?method=download&shareKey=5975b0e2070e3bd7cbf993dda98beb3f">
+<meta property="og:updated_time" content="2018-05-21T14:56:17.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM内存模型">
+<meta name="twitter:description" content="一直以来，对于JVM的内部结构不是很清楚，最近看了一篇博客，写的很好，这里简单总结下。">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/852D185478C24971B0D3A17D930F399F?method=download&shareKey=0dd3183138a5773fd7d8065c2eaec3b3">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="厚德载物，追求卓越" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>JVM内存模型 | 厚德载物，追求卓越</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?da71766ba1c7434dc8d65850fd8ef070";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/forevas.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Forevas</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我的征途是星辰大海</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ButterKnife/">ButterKnife</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GFW/">GFW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MinGW/">MinGW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OkHttp/">OkHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shadowsocks/">Shadowsocks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socks5/">Socks5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Throwable/">Throwable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VPS/">VPS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-world/">hello world</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小技巧/">小技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插件化/">插件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块化/">模块化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码解析/">源码解析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/组件化/">组件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锐速/">锐速</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">程序员一枚</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Forevas</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/forevas.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Forevas</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我的征途是星辰大海</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-JVM内存模型" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/JVM内存模型/" class="article-date">
+      <time datetime="2017-09-29T12:10:31.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JVM内存模型
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>一直以来，对于JVM的内部结构不是很清楚，最近看了一篇博客，写的很好，这里简单总结下。<br><a id="more"></a></p>
+<h3 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h3><p>JVM内存可以划分为线程共享的区域和线程私有的区域。</p>
+<p>共享区域有 <strong>方法区</strong> 和 <strong>堆</strong> ，私有区域有 <strong>虚拟机栈</strong> 、<strong>本地方法栈</strong> 和 <strong>程序计数器</strong>。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/852D185478C24971B0D3A17D930F399F?method=download&amp;shareKey=0dd3183138a5773fd7d8065c2eaec3b3" alt="JVM内存模型"></p>
+<h4 id="线程私有的数据区"><a href="#线程私有的数据区" class="headerlink" title="线程私有的数据区"></a>线程私有的数据区</h4><h5 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h5><p>为解决线程切换后能恢复到正确的执行位置的问题，每条线程都需要一个独立的程序计数器去记录正在执行的字节码指令地址。</p>
+<p>程序计数器是线程私有的一块较小的内存空间，可以看做当前线程所执行的字节码的行号指示器。</p>
+<p>如果正在执行java代码，则记录的是正在执行的字节码指令的地址，如果是Native方法，计数器的值为空。</p>
+<p>程序计数器是唯一一个没有规定任何 OutOfMemoryError 的区域。</p>
+<h5 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h5><p>虚拟机栈描述的是Java方法执行的内存模型，每个方法在执行的时候都会创建一个栈帧，栈帧用于存储局部变量表、操作数栈、动态链接、方法出口等信息。</p>
+<p>每个方法从调用直至完成的过程，对应一个栈帧在虚拟机栈中入栈到出栈的过程。其中，局部变量表主要存放一些基本类型的变量（int, short, long, byte, float, double, boolean, char）和 对象句柄，它们可以是方法参数，也可以是方法的局部变量。</p>
+<h6 id="StackOverflowError"><a href="#StackOverflowError" class="headerlink" title="StackOverflowError"></a>StackOverflowError</h6><p>一个线程拥有一个自己的栈，这个栈的大小决定了方法调用的可达深度（递归多少层次，或嵌套调用多少层其他方法，-Xss参数可以设置虚拟机栈大小），若线程请求的栈深度大于虚拟机允许的深度，则抛出 StackOverFlowError 异常。</p>
+<h6 id="OutofMemoryError"><a href="#OutofMemoryError" class="headerlink" title="OutofMemoryError"></a>OutofMemoryError</h6><p>栈的大小可以是固定的，也可以是动态扩展的，若虚拟机栈可以动态扩展（大多数虚拟机都可以），但扩展时无法申请到足够的内存(比如没有足够的内存为一个新创建的线程分配栈空间时)，则抛出 OutofMemoryError 异常。下图为栈帧结构图：<br><img src="https://note.youdao.com/yws/api/personal/file/9915DABBF48E4016A2C20B8D00279548?method=download&amp;shareKey=5a6407200b93ab521ea17f2681a83b2b" alt="栈帧"></p>
+<h5 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h5><p>本地方法栈与Java虚拟机栈非常相似，也是线程私有的，区别是虚拟机栈为虚拟机执行 Java 方法服务，而本地方法栈为虚拟机执行Native方法服务。与虚拟机栈一样，本地方法栈区域也会抛出 StackOverflowError 和 OutOfMemoryError 异常。</p>
+<h4 id="线程共享的数据区"><a href="#线程共享的数据区" class="headerlink" title="线程共享的数据区"></a>线程共享的数据区</h4><h5 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h5><p>也可以称为GC堆，我们new的对象都在这个区域，所有线程共享此区域。<br><img src="https://note.youdao.com/yws/api/personal/file/09EFE46F567C4E08B56863700FB4D1EE?method=download&amp;shareKey=5975b0e2070e3bd7cbf993dda98beb3f" alt="堆结构"></p>
+<p>Java堆可以处于物理上不连续的内存空间中，只要逻辑上是连续的即可。而且，Java堆在实现时，既可以是固定大小的，也可以是可拓展的，并且主流虚拟机都是按可扩展来实现的（通过-Xmx(最大堆容量) 和 -Xms(最小堆容量)控制）。如果在堆中没有内存完成实例分配，并且堆也无法再拓展时，将会抛出 OutOfMemoryError 异常。</p>
+<h6 id="TLAB"><a href="#TLAB" class="headerlink" title="TLAB"></a>TLAB</h6><p>TLAB可以提升内存分配效率，每个线程都要一块独立的空间TLAB，在TLAB上分配对象时不需要加锁(相对于CAS配上失败重试方式)，因此JVM在给线程的对象分配内存时会尽量的在TLAB上分配，在这种情况下JVM中分配对象内存的性能和C基本是一样高效的，但如果对象过大的话则仍然是直接使用堆空间分配。</p>
+<p>虚拟机为新生对象分配内存时，需要考虑修改指针(该指针用于划分内存使用空间和空闲空间)时的线程安全问题，因为存在可能出现正在给对象A分配内存，指针还未修改，对象B又同时使用原来的指针分配内存的情况。TLAB的存在就是为了解决这个问题：每个线程在Java堆中预先分配一小块内存TLAB，哪个线程需要分配内存就在自己的TLAB上进行分配，若TLAB用完并分配新的TLAB时，再加同步锁定，这样就大大提升了对象内存分配的效率。</p>
+<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>方法区与Java堆一样，也是线程共享的并且不需要连续的内存，其用于存储已被虚拟机加载的 类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
+<h6 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h6><p>运行时常量池（RuntimeConstantPool）是方法区的一部分，用于存放编译期生成的各种 字面量 和 符号引用。</p>
+<h5 id="Java堆-与-方法区的区别"><a href="#Java堆-与-方法区的区别" class="headerlink" title="Java堆 与 方法区的区别"></a>Java堆 与 方法区的区别</h5><p>Java堆是 Java代码可及的内存，是留给开发人员使用的；而非堆（Non-Heap）是JVM留给自己用的。</p>
+<p>方法区、JVM内部处理或优化所需的内存 (如JIT编译后的代码缓存)、每个类结构 (如运行时常量池、字段和方法数据)以及方法和构造方法的代码都在非堆内存中。</p>
+<h5 id="方法区的回收"><a href="#方法区的回收" class="headerlink" title="方法区的回收"></a>方法区的回收</h5><p>常量池的回收 和 对类型的卸载。</p>
+<h4 id="对象在虚拟机中的创建过程"><a href="#对象在虚拟机中的创建过程" class="headerlink" title="对象在虚拟机中的创建过程"></a>对象在虚拟机中的创建过程</h4><h5 id="1-检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程"><a href="#1-检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程" class="headerlink" title="1.检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程"></a>1.检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程</h5><h5 id="2-在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。"><a href="#2-在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。" class="headerlink" title="2.在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。"></a>2.在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。</h5><p>内存的分配有两种方式：</p>
+<ul>
+<li>指针碰撞：如果Java堆中内存绝对规整</li>
+<li>空闲列表：如果Java堆中内存并不规整</li>
+</ul>
+<p>修改指针 (该指针用于划分内存使用空间和空闲空间)时的线程安全问题：</p>
+<ul>
+<li>对分配内存空间的动作进行同步处理：采用CAS+失败重试的方式保证更新操作的原子性；</li>
+<li>把内存分配的动作按照线程划分的不同的空间中：每个线程在Java堆中预先分配一小块内存，称为本地线程分配缓冲（TLAB），哪个线程要分配内存，就在自己的TLAB上分配，如果TLAB用完并分配新的TLAB时，再加同步锁定。</li>
+</ul>
+<h5 id="3-内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值"><a href="#3-内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值" class="headerlink" title="3.内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值"></a>3.内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值</h5><h5 id="4-在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。"><a href="#4-在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。" class="headerlink" title="4.在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。"></a>4.在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行<init>方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。</init></h5><h4 id="对象在虚拟机中的访问定位"><a href="#对象在虚拟机中的访问定位" class="headerlink" title="对象在虚拟机中的访问定位"></a>对象在虚拟机中的访问定位</h4><p>句柄访问和直接指针访问</p>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a href="https://blog.csdn.net/justloveyou_/article/details/71189093" target="_blank" rel="external">https://blog.csdn.net/justloveyou_/article/details/71189093</a><br>——文中图片引用自CSDN</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/29/JVM内存模型/">JVM内存模型</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
+        <p><span>发布时间:</span>2017-09-29, 20:10:31</p>
+        <p><span>最后更新:</span>2018-05-21, 22:56:17</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/29/JVM内存模型/" title="JVM内存模型">https://forevas.github.io/2017/09/29/JVM内存模型/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/09/29/JVM内存模型/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/07/Java垃圾回收机制/">
+                    Java垃圾回收机制
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/23/Java-Throwable体系/">
+                    Java Throwable体系
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JVM内存模型"><span class="toc-number">1.</span> <span class="toc-text">JVM内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程私有的数据区"><span class="toc-number">1.1.</span> <span class="toc-text">线程私有的数据区</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#程序计数器"><span class="toc-number">1.1.1.</span> <span class="toc-text">程序计数器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#虚拟机栈"><span class="toc-number">1.1.2.</span> <span class="toc-text">虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#StackOverflowError"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">StackOverflowError</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#OutofMemoryError"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">OutofMemoryError</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#本地方法栈"><span class="toc-number">1.1.3.</span> <span class="toc-text">本地方法栈</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程共享的数据区"><span class="toc-number">1.2.</span> <span class="toc-text">线程共享的数据区</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Java堆"><span class="toc-number">1.2.1.</span> <span class="toc-text">Java堆</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#TLAB"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">TLAB</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#方法区"><span class="toc-number">1.2.2.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#运行时常量池"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Java堆-与-方法区的区别"><span class="toc-number">1.2.3.</span> <span class="toc-text">Java堆 与 方法区的区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#方法区的回收"><span class="toc-number">1.2.4.</span> <span class="toc-text">方法区的回收</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对象在虚拟机中的创建过程"><span class="toc-number">1.3.</span> <span class="toc-text">对象在虚拟机中的创建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.检查虚拟机是否加载了所要new的类，若没加载，则首先执行相应的类加载过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.在类加载检查通过后，对象所需内存的大小在类加载完成后便可完全确定，虚拟机就会为新生对象分配内存。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。"><span class="toc-number">1.3.4.</span> <span class="toc-text">4.在上面的工作完成之后，从虚拟机的角度来看，一个新的对象已经产生了，但从Java程序的视角来看，对象的创建才刚刚开始，此时会执行方法把对象按照程序员的意愿进行初始化，从而产生一个真正可用的对象。</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对象在虚拟机中的访问定位"><span class="toc-number">1.4.</span> <span class="toc-text">对象在虚拟机中的访问定位</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参考链接"><span class="toc-number">1.5.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"JVM内存模型　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'https://forevas.github.io/2017/09/29/JVM内存模型/';
+            this.page.identifier = '2017/09/29/JVM内存模型/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//forevas.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/07/Java垃圾回收机制/" title="上一篇: Java垃圾回收机制">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/23/Java-Throwable体系/" title="下一篇: Java Throwable体系">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/RxJava学习总结/">RxJava学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/ThreadLocal/">ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/15/String原理解析/">String原理解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/07/Java垃圾回收机制/">Java垃圾回收机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/JVM内存模型/">JVM内存模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/Java-Throwable体系/">Java Throwable体系</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Java注解/">Java注解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/15/开发技巧/">开发技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/模块化-组件化-插件化/">模块化,组件化,插件化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/21/OpenGL-Es学习总结/">OpenGL Es学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/15/Android音频处理-采集/">Android音频处理-采集</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/05/音视频基础/">音视频基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/25/ButterKnife解析/">ButterKnife解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/10/OkHttp源码解析/">Okhttp源码解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/浅谈设计模式-代理模式和装饰模式/">浅谈设计模式-代理模式和装饰模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/27/浅谈设计模式-Builder模式/">浅谈设计模式-Builder模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/浅谈设计模式-单例模式/">浅谈设计模式-单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/20/Windows下使用MinGW编译FFmpeg/">Windows下使用MinGW编译FFmpeg</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">搭建Shadowsocks代理服务实现科学上网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/08/新的开始/">新的开始</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 Forevas
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

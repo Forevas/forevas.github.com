@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Forevas" />
+
+
+
+<meta name="description" content="OpenGL ES是OpenGL的子集,针对嵌入式系统和移动设备所设计.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL Es学习总结">
+<meta property="og:url" content="https://forevas.github.io/2017/08/21/OpenGL-Es学习总结/index.html">
+<meta property="og:site_name" content="厚德载物，追求卓越">
+<meta property="og:description" content="OpenGL ES是OpenGL的子集,针对嵌入式系统和移动设备所设计.">
+<meta property="og:updated_time" content="2018-05-21T14:17:58.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL Es学习总结">
+<meta name="twitter:description" content="OpenGL ES是OpenGL的子集,针对嵌入式系统和移动设备所设计.">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="厚德载物，追求卓越" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>OpenGL Es学习总结 | 厚德载物，追求卓越</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?da71766ba1c7434dc8d65850fd8ef070";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/forevas.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Forevas</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我的征途是星辰大海</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ButterKnife/">ButterKnife</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GFW/">GFW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MinGW/">MinGW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OkHttp/">OkHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shadowsocks/">Shadowsocks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socks5/">Socks5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Throwable/">Throwable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VPS/">VPS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-world/">hello world</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小技巧/">小技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插件化/">插件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块化/">模块化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码解析/">源码解析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/组件化/">组件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锐速/">锐速</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">程序员一枚</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Forevas</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/forevas.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Forevas</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我的征途是星辰大海</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-OpenGL-Es学习总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/21/OpenGL-Es学习总结/" class="article-date">
+      <time datetime="2017-08-21T13:27:55.000Z" itemprop="datePublished">2017-08-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OpenGL Es学习总结
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenGL/">OpenGL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>OpenGL ES是OpenGL的子集,针对嵌入式系统和移动设备所设计.<br><a id="more"></a></p>
+<h4 id="OpenGL-ES-管道-Pipeline"><a href="#OpenGL-ES-管道-Pipeline" class="headerlink" title="OpenGL ES 管道(Pipeline)"></a>OpenGL ES 管道(Pipeline)</h4><ol>
+<li>管道“工序”大致可以分为 Transformation Stage 和 Rasterization Stage 两大步。</li>
+<li>OpenGL ES 支持的基本图形为 点 Point, 线 Line, 和三角形 Triangle ，其它所有复制图形都是通过这几种基本几何图形组合而成。</li>
+<li>在发出绘图指令后，会对顶点(Vertices)数组进行指定的坐标变换或光照处理。</li>
+<li>顶点处理完成后，通过 Rasterizer 来生成像素信息，称为”Fragments“ 。</li>
+<li>对于 Fragment 在经过 Texture Processing, Color Sum ,Fog 等处理并将最终处理结果存放在内存中（称为FrameBuffer)。<br>OpenGL 2.0可以通过编程来修改蓝色的步骤，称为 Programmable Shader.</li>
+</ol>
+<h4 id="GLSurfaceView"><a href="#GLSurfaceView" class="headerlink" title="GLSurfaceView:"></a>GLSurfaceView:</h4><p>setDebugFlags(int) 设置 Debug 标志。</p>
+<p>setEGLConfigChooser (boolean) 选择一个 Config 接近 16bitRGB 颜色模式，可以打开或关闭深度(Depth)Buffer ,缺省为RGB_565 并打开至少有 16bit 的 depth Buffer。</p>
+<p>setEGLConfigChooser(EGLConfigChooser) 选择自定义 EGLConfigChooser。</p>
+<p>setEGLConfigChooser(int, int, int, int, int, int) 指定 red ,green, blue, alpha, depth ,stencil 支持的位数，缺省为 RGB_565 ,16 bit depth buffer。</p>
+<p>GLSurfaceView 缺省创建为 RGB_565 颜色格式的 Surface，如果需要支持透明度，可以调用 getHolder().setFormat(PixelFormat.TRANSLUCENT)。</p>
+<p>GLSurfaceView 的渲染模式有两种，一种是连续不断的更新屏幕，另一种为 on-demand ，只有在调用 requestRender() 在更新屏幕。 缺省为 RENDERMODE_CONTINUOUSLY 持续刷新屏幕。</p>
+<h5 id="GLSurfaceView-Renderer回调方法"><a href="#GLSurfaceView-Renderer回调方法" class="headerlink" title="GLSurfaceView.Renderer回调方法:"></a>GLSurfaceView.Renderer回调方法:</h5><p>onSurfaceCreated：在这个方法中主要用来设置一些绘制时不常变化的参数，比如：背景色，是否打开 z-buffer等。</p>
+<p>onDrawFrame：定义实际的绘图操作。</p>
+<p>onSurfaceChanged：如果设备支持屏幕横向和纵向切换，这个方法将发生在横向和纵向互换时。此时可以重新设置绘制的纵横比率。</p>
+<h4 id="OpenGL-坐标系"><a href="#OpenGL-坐标系" class="headerlink" title="OpenGL 坐标系"></a>OpenGL 坐标系</h4><p>三维坐标系，原点在中间，x 轴向右，y 轴向上，z 轴朝向我们，x y z 取值范围都是 [-1, 1]</p>
+<p>OpenGL ES支持的图形有 点,线,三角形</p>
+<p>先定义点集(vertexArray)(三个坐标一组,一维数组)<br>indices 为绘制顺序</p>
+<p>eg:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">float[] vertexArray = new float[]&#123;</div><div class="line"> -0.8f , -0.4f * 1.732f , 0.0f ,</div><div class="line"> 0.8f , -0.4f * 1.732f , 0.0f ,</div><div class="line"> 0.0f , 0.4f * 1.732f , 0.0f ,</div><div class="line"> &#125;;</div><div class="line">ByteBuffer vbb = ByteBuffer.allocateDirect(vertexArray.length*4);</div><div class="line">vbb.order(ByteOrder.nativeOrder());</div><div class="line">FloatBuffer vertex = vbb.asFloatBuffer();</div><div class="line">vertex.put(vertexArray);</div><div class="line">vertex.position(0);</div></pre></td></tr></table></figure></p>
+<p>glEnableClientState 和 glDisableClientState 可以控制的 pipeline 开关可以有：GL_COLOR_ARRAY (颜色），GL_NORMAL_ARRAY (法线)，<br>GL_TEXTURE_COORD_ARRAY (材质)，GL_VERTEX_ARRAY(顶点)， GL_POINT_SIZE_ARRAY_OES等。</p>
+<p>在打开顶点开关后，将顶点坐标传给 OpenGL 管道的方法为：glVertexPointer：</p>
+<p>对应的传入颜色，顶点，材质，法线的方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">glColorPointer(int size,int type,int stride,Buffer pointer)</div><div class="line">glVertexPointer(int size, int type, int stride, Buffer pointer)</div><div class="line">glTexCoordPointer(int size, int type, int stride, Buffer pointer)</div><div class="line">glNormalPointer(int type, int stride, Buffer pointer)</div><div class="line"></div><div class="line">public abstract void glDrawArrays(int mode, int first, int count)   使用VetexBuffer 来绘制，顶点的顺序由vertexBuffer中的顺序指定。</div><div class="line">public abstract void glDrawElements(int mode, int count, int type, Buffer indices)  ，可以重新定义顶点的顺序，顶点的顺序由indices Buffer 指定。</div><div class="line"></div><div class="line">TRIANGLES,TRIANGLE_STRIP,TRIANGLE_FAN代表三种绘制三角形的方式.</div></pre></td></tr></table></figure></p>
+<h4 id="矩阵操作，单位矩阵"><a href="#矩阵操作，单位矩阵" class="headerlink" title="矩阵操作，单位矩阵"></a>矩阵操作，单位矩阵</h4><p>在进行平移，旋转，缩放变换时，所有的变换都是针对当前的矩阵（与当前矩阵相乘），如果需要将当前矩阵回复最初的无变换的矩阵，可以使用单位矩阵（无平移，缩放，旋转）。</p>
+<p>public abstract void glLoadIdentity()。</p>
+<p>在栈中保存当前矩阵和从栈中恢复所存矩阵，可以使用</p>
+<p>public abstract void glPushMatrix()</p>
+<p>和</p>
+<p>public abstract void glPopMatrix()。</p>
+<p>在进行坐标变换的一个好习惯是在变换前使用glPushMatrix保存当前矩阵，完成坐标变换操作后，再调用glPopMatrix恢复原先的矩阵设置。</p>
+<p>glLoadIdentity()将栈顶矩阵恢复为单位矩阵</p>
+<p>glPushMatrix()入栈一个栈顶矩阵的copy</p>
+<p>glPopMatrix()栈顶矩阵出栈,之前栈顶第二个矩阵变成当前矩阵</p>
+<p>我们一直使用的都是栈顶矩阵,栈内至少有一个矩阵</p>
+<p>这种入栈出栈的操作是为了保存矩阵的状态,消除当前矩阵的变换对下一组图形变化的影响(理解矩阵变化对空间的影响).</p>
+<h4 id="Texture纹理"><a href="#Texture纹理" class="headerlink" title="Texture纹理"></a>Texture纹理</h4><ol>
+<li><p>创建Bitmap对象:<br>Bitmap bitmap = BitmapFactory.decodeResource(contect.getResources(),R.drawable.icon);</p>
+</li>
+<li><p>创建材质(Generating a texture):<br>使用OpenGL库创建一个材质(Texture)，首先是获取一个Texture Id。<br>// Create an int array with the number of textures we want,<br>// in this case 1.<br>int[] textures = new int[1];<br>// Tell OpenGL to generate textures.<br>gl.glGenTextures(1, textures, 0);<br>有了Texture Id之后，就可以通知OpenGL库使用这个Texture：<br>gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);</p>
+</li>
+<li><p>设置Texture参数glTexParameter:<br>用来渲染的Texture可能比要渲染的区域大或者小，这是需要设置Texture需要放大或是缩小时OpenGL的模式：<br>// Scale up if the texture if smaller.<br>gl.glTexParameterf(GL10.GL_TEXTURE_2D,GL10.GL_TEXTURE_MAG_FILTER,GL10.GL_LINEAR);<br>// scale linearly when image smalled than texture<br>gl.glTexParameterf(GL10.GL_TEXTURE_2D,GL10.GL_TEXTURE_MIN_FILTER,GL10.GL_LINEAR);</p>
+</li>
+<li><p>UV Mapping<br>纹理坐标系为左上(0,0),右下(1,1)</p>
+</li>
+</ol>
+<p>默认纹理图片的宽高都是1</p>
+<p>textureCoordinates[]用来记录纹理坐标点的映射顺序(注意这里的坐标点可以大于或者小于1,起到缩放和放大的效果),用来和vertex[]进行映射,这样才能知道如何将纹理贴到平面上去<br>float textureCoordinates[] = {0.0f, 2.0f,2.0f, 2.0f,0.0f, 0.0f,2.0f, 0.0f };</p>
+<p>GL_REPEAT 重复Texture。<br>GL_CLAMP_TO_EDGE 只靠边线绘制一次。</p>
+<p>对应代码:<br>gl.glTexParameterf(GL10.GL_TEXTURE_2D,GL10.GL_TEXTURE_WRAP_S,GL10.GL_REPEAT);<br>gl.glTexParameterf(GL10.GL_TEXTURE_2D,GL10.GL_TEXTURE_WRAP_T,GL10.GL_REPEAT);<br>然后是将Bitmap资源和Texture绑定起来：<br>GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);</p>
+<ol>
+<li><p>使用Texture<br>为了能够使用上面定义的Texture，需要创建一Buffer来存储UV坐标：<br>FloatBuffer byteBuf = ByteBuffer.allocateDirect(textureCoordinates.length * 4);<br>byteBuf.order(ByteOrder.nativeOrder());<br>textureBuffer = byteBuf.asFloatBuffer();<br>textureBuffer.put(textureCoordinates);<br>textureBuffer.position(0);</p>
+</li>
+<li><p>渲染<br>// Telling OpenGL to enable textures.<br>gl.glEnable(GL10.GL_TEXTURE_2D);<br>// Tell OpenGL where our texture is located.<br>gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);<br>// Tell OpenGL to enable the use of UV coordinates.<br>gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);<br>// Telling OpenGL where our UV coordinates are.<br>gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);</p>
+</li>
+</ol>
+<p>// … here goes the rendering of the mesh …</p>
+<p>// Disable the use of UV coordinates.<br>gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);<br>// Disable the use of textures.<br>gl.glDisable(GL10.GL_TEXTURE_2D);</p>
+<p>多个矩阵变换,实际顺序和写的顺序其实是相反的</p>
+<p>gluLookAt决定了我们观测的位置,不同的位置观测到的效果不一样,所以通常每次画图的时候要向z轴负方向移动一个单位</p>
+<p>OpenGL坐标体系:局部空间,世界空间,观察空间,裁剪空间<br><a href="http://blog.csdn.net/killallpigs/article/details/53941138" target="_blank" rel="external">http://blog.csdn.net/killallpigs/article/details/53941138</a></p>
+<h4 id="EGL"><a href="#EGL" class="headerlink" title="EGL:"></a>EGL:</h4><p>EGL是OpenGL ES与底层窗口系统进行通信的桥梁.</p>
+<ul>
+<li>EGL初始化流程</li>
+<li>a, 选择Display</li>
+<li>b, 选择Config</li>
+<li>c, 创建Surface</li>
+<li>d, 创建Context</li>
+<li>e, 指定当前的环境为绘制环境</li>
+</ul>
+<p>在c这一步:<br>要在某个窗口中显示, 则用eglCreateWindowSurface() 来创建,只有这种是在物理显示设备上显示的。</p>
+<p>要在内存中以位图保存，则用eglCreatePixmapSurface()来创建,该类型只用于离屏渲染.</p>
+<p>要保存在显存中的帧，则用eglCreatePbufferSurface()来创建。</p>
+<p>使用EGL的绘图的一般步骤：</p>
+<p>初始化阶段:</p>
+<ol>
+<li>获取 EGLDisplay 对象</li>
+<li>初始化与 EGLDisplay 之间的连接</li>
+<li>获取 EGLConfig 对象</li>
+<li>创建 EGLContext 实例</li>
+<li>创建 EGLSurface 实例</li>
+<li>连接 EGLContext 和 EGLSurface<br>使用阶段:</li>
+<li>使用 GL 指令绘制图形<br>销毁阶段:</li>
+<li>断开并释放与 EGLSurface 关联的 EGLContext 对象</li>
+<li>删除 EGLSurface 对象</li>
+<li>删除 EGLContext 对象</li>
+<li>终止与 EGLDisplay 之间的连接</li>
+</ol>
+<p>一般来说在 Android 平台上开发 OpenGL ES 应用，无需直接使用javax.microedition.khronos.egl 包中的类按照上述步骤来使用 OpenGL ES 绘制图形，<br>在Android 平台中提供了一个 android.opengl 包，类 GLSurfaceView 提供了对Display,Surface,Context 的管理，大大简化了 OpenGL ES 的程序框架,对应大部分 OpenGL ES 开发，<br>只需调用一个方法来设置 OpenGLView 用到的 GLSurfaceView.Renderer。</p>
+<p>所以,想要抛开GLSurfaceView来进行渲染,就要使用EGL.</p>
+<p>On-Screen Rendering<br>即当前屏幕渲染，在用于显示的屏幕缓冲区中进行，不需要额外创建新的缓存，也不需要开启新的上下文，所以性能较好，但是受到缓存大小限制等因素，一些复杂的操作无法完成。</p>
+<p>Off-Screen Rendering<br>即离屏渲染，指的是在 GPU 的当前屏幕缓冲区外开辟新的缓冲区进行操作。</p>
+<h4 id="FrameBufferObject"><a href="#FrameBufferObject" class="headerlink" title="FrameBufferObject"></a>FrameBufferObject</h4><p>帧缓存,一般使用OpenGL ES是直接使用GLSurfaceView和GLSurfaceView.Renderer提供的环境进行的,然后渲染也是直接显示在屏幕上,有时候我们并不想直接渲染到屏幕.这时候使用帧缓存可以实现离屏渲染.</p>
+<p>帧缓存本身相当于一个容器,RenderBuffer和Texture可以挂载在帧缓存之上,一旦与帧缓存绑定,这种关系一直会存在,除非解绑.<br>我们可以通过帧缓存进行渲染到纹理操作,然后用渲染后的纹理进行下一个帧缓存渲染的输入,然后可得到输出纹理,如此循环…<br>最后我们可以拿到最后一次的输出进行渲染到屏幕等操作.</p>
+<h4 id="使用纹理"><a href="#使用纹理" class="headerlink" title="使用纹理:"></a>使用纹理:</h4><p>eg:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//激活纹理单元1</div><div class="line">GLES20.glActiveTexture(GLES20.GL_TEXTURE1);</div><div class="line">//绑定2D纹理</div><div class="line">GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,getTextureId());</div><div class="line">//将纹理设置给Shader</div><div class="line">GLES20.glUniform1i(mHTexture,1);</div></pre></td></tr></table></figure></p>
+<p>android camera都是横着取景的,必须经过矩阵变换才正常.</p>
+<p>opengl规定纹理坐标为左下是原点,因为平台特性的原因,在Android上可以认为左上是原点,否则绘制出来的图片就是颠倒的,不过这样也是有弊端的,除了第一次外<br>(平台的最终image库绘制图片的时候，将图片上下颠倒了(reverse the Y)。………image库………Bingo, 明白了。)</p>
+<p>(其实可以这样理解,因为Android屏幕Y轴是向下的,所以图片按照纹理坐标的定义读入进来的话刚好是上下相反的,但当把图片转化为纹理之后,之后的渲染到纹理操作都是在OpenGL的纹理坐标下进行的,<br>这个时候若是传入相反的纹理坐标时,势必会导致纹理再次上下翻转,所以调整好纹理方向之后,之后的每次操作要么传入正确的坐标,要么传入上下颠倒矩阵,这样才能保证最终纹理方向的正确)</p>
+<p>,后续每次转换都要传入颠倒矩阵,否则的话每次操作都会上下翻转图片.</p>
+<p>利用PBO可以大幅度提升GLReadPixel的速度(提升十倍,用两个PBO交替读取),不过3.0之前不能使用.</p>
+<h4 id="glScissor裁剪操作"><a href="#glScissor裁剪操作" class="headerlink" title="glScissor裁剪操作"></a>glScissor裁剪操作</h4><p>glScissor裁剪操作,接下来的渲染操作只在裁剪区域内有效.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">EasyGlUtils.bindFrameTexture(fFrame[0],fTexture[0]);</div><div class="line">GLES20.glViewport(0,0,mPreviewWidth,mPreviewHeight);</div><div class="line">GLES20.glEnable(GLES20.GL_SCISSOR_TEST);//启用剪裁测试</div><div class="line">GLES20.glScissor(0,500,mPreviewWidth,mPreviewHeight-1000);</div><div class="line">mPreFilter.draw();</div><div class="line">GLES20.glDisable(GLES20.GL_SCISSOR_TEST);//关闭剪裁测试</div><div class="line">EasyGlUtils.unBindFrameBuffer();</div></pre></td></tr></table></figure></p>
+<p>使用正交投影可以裁剪画面</p>
+<p>OpenGL三维纹理坐标 s,t,r,q<br>q是一个缩放因子，相当于顶点坐标中的w。实际应用在纹理读取中的坐标应该是s/q,t/q,r/q。默认情况下，q是1.0。通常情况下貌似没什么用，但是在一些产生纹理坐标的高级算法比如阴影贴图中，比较有用。<br>s、t、r分别相当于普通坐标系中的x、y、z三个方向。分别对应glTexImage3D中的参数width、height、depth。</p>
+<h4 id="图像抗锯齿"><a href="#图像抗锯齿" class="headerlink" title="图像抗锯齿"></a>图像抗锯齿</h4><h5 id="超级采样抗锯齿（SSAA）"><a href="#超级采样抗锯齿（SSAA）" class="headerlink" title="超级采样抗锯齿（SSAA）"></a>超级采样抗锯齿（SSAA）</h5><p>图像放大之后取临近的2-4个像素点,采样混合后生成最终像素,令每个像素拥有邻近像素的特征,像素与像素之间的过渡色彩，就变得近似，<br>令图形的边缘色彩过渡趋于平滑。再把最终像素还原回原来大小的图像，并保存到帧缓存也就是显存中，替代原图像存储起来，最后输出到显示器，显示出一帧画面。<br>这样就等于把一幅模糊的大图，通过细腻化后再缩小成清晰的小图<br>(1.顺序栅格超级采样（Ordered Grid Super-Sampling，简称OGSS），采样时选取2个邻近像素。2.旋转栅格超级采样（Rotated Grid Super-Sampling，简称RGSS），采样时选取4个邻近像素。)</p>
+<h4 id="多重采样抗锯齿（MSAA）"><a href="#多重采样抗锯齿（MSAA）" class="headerlink" title="多重采样抗锯齿（MSAA）"></a>多重采样抗锯齿（MSAA）</h4><p>多重采样抗锯齿（MultiSampling Anti-Aliasing，简称MSAA）是一种特殊的超级采样抗锯齿（SSAA）。MSAA首先来自于OpenGL。<br>具体是MSAA只对Z缓存（Z-Buffer）和模板缓存(Stencil Buffer)中的数据进行超级采样抗锯齿的处理。可以简单理解为只对多边形的边缘进行抗锯齿处理。<br>这样的话，相比SSAA对画面中所有数据进行处理，MSAA对资源的消耗需求大大减弱，不过在画质上可能稍有不如SSAA。</p>
+<p>剩下的抗锯齿方式在这里看:<a href="https://baike.baidu.com/item/%E6%8A%97%E9%94%AF%E9%BD%BF/7556069?fr=aladdin" target="_blank" rel="external">https://baike.baidu.com/item/%E6%8A%97%E9%94%AF%E9%BD%BF/7556069?fr=aladdin</a></p>
+<h4 id="Android设备抗锯齿"><a href="#Android设备抗锯齿" class="headerlink" title="Android设备抗锯齿"></a>Android设备抗锯齿</h4><p>上面的在Android平台都不靠谱,这才是抗锯齿的最佳方式:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">int[] textures = new int[1];</div><div class="line">GLES20.glGenTextures(1, textures, 0);</div><div class="line">mTextureID = textures[0];</div><div class="line">GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureID);</div><div class="line">checkGlError(&quot;glBindTexture mTextureID&quot;);</div><div class="line">GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER,</div><div class="line">                GLES20.GL_LINEAR);//改为线性过滤,是画面更加平滑(抗锯齿)</div><div class="line">GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER,</div><div class="line">                GLES20.GL_LINEAR);</div><div class="line">GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_S,</div><div class="line">                GLES20.GL_CLAMP_TO_EDGE);</div><div class="line">GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_T,</div><div class="line">                GLES20.GL_CLAMP_TO_EDGE);</div></pre></td></tr></table></figure></p>
+<h5 id="OpenGL——纹理过滤函数glTexParameteri"><a href="#OpenGL——纹理过滤函数glTexParameteri" class="headerlink" title="OpenGL——纹理过滤函数glTexParameteri()"></a>OpenGL——纹理过滤函数glTexParameteri()</h5><p>图象从纹理图象空间映射到帧缓冲图象空间(映射需要重新构造纹理图像,这样就会造成应用到多边形上的图像失真),这时就可用glTexParmeteri()函数来确定如何把纹理象素映射成像素.</p>
+<p>glTexParameteri(int target, int pname, int param)</p>
+<ul>
+<li><p>target —— 目标纹理，必须为GL_TEXTURE_1D或GL_TEXTURE_2D，视频的话对应于GLES11Ext.GL_TEXTURE_EXTERNAL_OES；</p>
+</li>
+<li><p>pname —— 用来设置纹理映射过程中像素映射的问题等，取值可以为：</p>
+</li>
+</ul>
+<ol>
+<li>GL_TEXTURE_MIN_FILTER 设置最小过滤，第三个参数决定用什么过滤；</li>
+<li>GL_TEXTURE_MAG_FILTER设置最大过滤，也是第三个参数决定；</li>
+<li>GL_TEXTURE_WRAP_S；纹理坐标一般用str表示，分别对应xyz，2d纹理用st表示</li>
+<li>GL_TEXTURE_WRAP_T   接上面，纹理和你画的几何体可能不是完全一样大的，在边界的时候如何处理呢？就是这两个参数决定的，wrap表示环绕，可以理解成让纹理重复使用，直到全部填充完成；</li>
+</ol>
+<ul>
+<li>param —— 实际上就是pname的值</li>
+</ul>
+<ol>
+<li>GL_LINEAR: 线性过滤, 使用距离当前渲染像素中心最近的4个纹素加权平均值.</li>
+<li>GL_LINEAR_MIPMAP_NEAREST: 使用GL_NEAREST对最接近当前多边形的解析度的两个层级贴图进行采样,然后用这两个值进行线性插值.</li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/08/21/OpenGL-Es学习总结/">OpenGL Es学习总结</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
+        <p><span>发布时间:</span>2017-08-21, 21:27:55</p>
+        <p><span>最后更新:</span>2018-05-21, 22:17:58</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/08/21/OpenGL-Es学习总结/" title="OpenGL Es学习总结">https://forevas.github.io/2017/08/21/OpenGL-Es学习总结/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2017/08/21/OpenGL-Es学习总结/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/01/模块化-组件化-插件化/">
+                    模块化,组件化,插件化
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/06/15/Android音频处理-采集/">
+                    Android音频处理-采集
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenGL-ES-管道-Pipeline"><span class="toc-number">1.</span> <span class="toc-text">OpenGL ES 管道(Pipeline)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GLSurfaceView"><span class="toc-number">2.</span> <span class="toc-text">GLSurfaceView:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#GLSurfaceView-Renderer回调方法"><span class="toc-number">2.1.</span> <span class="toc-text">GLSurfaceView.Renderer回调方法:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenGL-坐标系"><span class="toc-number">3.</span> <span class="toc-text">OpenGL 坐标系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#矩阵操作，单位矩阵"><span class="toc-number">4.</span> <span class="toc-text">矩阵操作，单位矩阵</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Texture纹理"><span class="toc-number">5.</span> <span class="toc-text">Texture纹理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EGL"><span class="toc-number">6.</span> <span class="toc-text">EGL:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FrameBufferObject"><span class="toc-number">7.</span> <span class="toc-text">FrameBufferObject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用纹理"><span class="toc-number">8.</span> <span class="toc-text">使用纹理:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#glScissor裁剪操作"><span class="toc-number">9.</span> <span class="toc-text">glScissor裁剪操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图像抗锯齿"><span class="toc-number">10.</span> <span class="toc-text">图像抗锯齿</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#超级采样抗锯齿（SSAA）"><span class="toc-number">10.1.</span> <span class="toc-text">超级采样抗锯齿（SSAA）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多重采样抗锯齿（MSAA）"><span class="toc-number">11.</span> <span class="toc-text">多重采样抗锯齿（MSAA）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Android设备抗锯齿"><span class="toc-number">12.</span> <span class="toc-text">Android设备抗锯齿</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#OpenGL——纹理过滤函数glTexParameteri"><span class="toc-number">12.1.</span> <span class="toc-text">OpenGL——纹理过滤函数glTexParameteri()</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"OpenGL Es学习总结　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'https://forevas.github.io/2017/08/21/OpenGL-Es学习总结/';
+            this.page.identifier = '2017/08/21/OpenGL-Es学习总结/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//forevas.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/01/模块化-组件化-插件化/" title="上一篇: 模块化,组件化,插件化">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/06/15/Android音频处理-采集/" title="下一篇: Android音频处理-采集">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/RxJava学习总结/">RxJava学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/ThreadLocal/">ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/15/String原理解析/">String原理解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/07/Java垃圾回收机制/">Java垃圾回收机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/JVM内存模型/">JVM内存模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/Java-Throwable体系/">Java Throwable体系</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Java注解/">Java注解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/15/开发技巧/">开发技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/模块化-组件化-插件化/">模块化,组件化,插件化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/21/OpenGL-Es学习总结/">OpenGL Es学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/15/Android音频处理-采集/">Android音频处理-采集</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/05/音视频基础/">音视频基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/25/ButterKnife解析/">ButterKnife解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/10/OkHttp源码解析/">Okhttp源码解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/浅谈设计模式-代理模式和装饰模式/">浅谈设计模式-代理模式和装饰模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/27/浅谈设计模式-Builder模式/">浅谈设计模式-Builder模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/浅谈设计模式-单例模式/">浅谈设计模式-单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/20/Windows下使用MinGW编译FFmpeg/">Windows下使用MinGW编译FFmpeg</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">搭建Shadowsocks代理服务实现科学上网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/08/新的开始/">新的开始</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 Forevas
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
