@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Forevas" />
+
+
+
+<meta name="description" content="最近把大学时的计算机网络教程又拿出来啃了一遍，感觉好多知识都还给老师了，所以还是得时常看看，温故而知新，写篇读书笔记记录一下。由于OSI七层模型划分的过于细致，实际应用一般不会划分这么细，所以这里只讨论五层模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议五层模型">
+<meta property="og:url" content="https://forevas.github.io/2018/05/04/网络协议五层模型/index.html">
+<meta property="og:site_name" content="厚德载物，追求卓越">
+<meta property="og:description" content="最近把大学时的计算机网络教程又拿出来啃了一遍，感觉好多知识都还给老师了，所以还是得时常看看，温故而知新，写篇读书笔记记录一下。由于OSI七层模型划分的过于细致，实际应用一般不会划分这么细，所以这里只讨论五层模型。">
+<meta property="og:updated_time" content="2018-05-22T15:42:37.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议五层模型">
+<meta name="twitter:description" content="最近把大学时的计算机网络教程又拿出来啃了一遍，感觉好多知识都还给老师了，所以还是得时常看看，温故而知新，写篇读书笔记记录一下。由于OSI七层模型划分的过于细致，实际应用一般不会划分这么细，所以这里只讨论五层模型。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="厚德载物，追求卓越" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>网络协议五层模型 | 厚德载物，追求卓越</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?da71766ba1c7434dc8d65850fd8ef070";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/forevas.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Forevas</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">我的征途是星辰大海</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ANR/">ANR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ActivityThread/">ActivityThread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binder/">Binder</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ButterKnife/">ButterKnife</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/">Context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GFW/">GFW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IPC/">IPC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MinGW/">MinGW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OkHttp/">OkHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parcelable/">Parcelable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Serializable/">Serializable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shadowsocks/">Shadowsocks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socks5/">Socks5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Throwable/">Throwable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VPS/">VPS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ViewRootImpl/">ViewRootImpl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Window/">Window</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-world/">hello world</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础巩固/">基础巩固</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小技巧/">小技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插件化/">插件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模块化/">模块化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码解析/">源码解析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/组件化/">组件化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锐速/">锐速</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">程序员一枚</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Forevas</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/forevas.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Forevas</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">我的征途是星辰大海</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:forevase@outlook.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/Forevas" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-网络协议五层模型" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/05/04/网络协议五层模型/" class="article-date">
+      <time datetime="2018-05-04T15:31:02.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      网络协议五层模型
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础巩固/">基础巩固</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>最近把大学时的计算机网络教程又拿出来啃了一遍，感觉好多知识都还给老师了，所以还是得时常看看，温故而知新，写篇读书笔记记录一下。由于OSI七层模型划分的过于细致，实际应用一般不会划分这么细，所以这里只讨论五层模型。<br><a id="more"></a></p>
+<h3 id="1-物理层"><a href="#1-物理层" class="headerlink" title="1.物理层"></a>1.物理层</h3><p>物理层考虑的是如何传输比特流，定义硬件标准等等。</p>
+<h4 id="调制解调"><a href="#调制解调" class="headerlink" title="调制解调"></a>调制解调</h4><p>将数字信号转化为模拟信号，将模拟信号还原为数字信号，此过程为调制解调。(调制解调器的作用)</p>
+<h4 id="ADSL，FTTX，无线接入技术"><a href="#ADSL，FTTX，无线接入技术" class="headerlink" title="ADSL，FTTX，无线接入技术"></a>ADSL，FTTX，无线接入技术</h4><p>互联网发展的早期，用传统电话线来进行网络接入，低频段用来电话语音数据传输，高频段进行网络数据传输，互不影响。</p>
+<p>FTTX只要指的是光纤接入技术。</p>
+<p>前几种都是有线接入，无线接入技术主要用于移动设备。包括现在的物联网等等。</p>
+<h3 id="2-数据链路层"><a href="#2-数据链路层" class="headerlink" title="2.数据链路层"></a>2.数据链路层</h3><p>传输数据帧.将上层数据封装成帧，差错检测，超时重传。不过超时重传并不是必须的。PPP协议(点对点传输协议)是数据链路层应用最广泛的协议。对上层提供不可靠的服务。</p>
+<h4 id="PPP协议特点"><a href="#PPP协议特点" class="headerlink" title="PPP协议特点"></a>PPP协议特点</h4><p>1.简单 2.封装成帧 3.透明性 4.多种网络层协议和多种类型链路 5.差错检测 6.检测连接状态 7.最大传送单元 8.网络层地址协商</p>
+<h4 id="CRC以及FCS"><a href="#CRC以及FCS" class="headerlink" title="CRC以及FCS"></a>CRC以及FCS</h4><p>循环冗余检验CRC是一种检错方法，帧检验序列FCS是添加在数据后面的冗余码</p>
+<h5 id="MTU"><a href="#MTU" class="headerlink" title="MTU"></a>MTU</h5><p>最大传输单元，帧的数据部分不能超过MTU数值，不同协议的MTU数值也不一样。</p>
+<h4 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h4><p>以太网是目前主流的局域网标准，提供不可靠的交付，注意PPP协议是工作在广域网的，不是工作在这里的。</p>
+<p>以太网的结构有总线型，星型(配合集线器)。星型结构在逻辑上还是总线型。在同一时刻之多只允许一个站点发送数据。</p>
+<h5 id="CSMA-CD协议"><a href="#CSMA-CD协议" class="headerlink" title="CSMA/CD协议"></a>CSMA/CD协议</h5><p>载波监听多点接入/碰撞检测的缩写。协议要点：<br>1.多点接入 2.载波监听 3.碰撞检测<br>CSMA/CD协议是半双工通信，只能进行双向交替通信。</p>
+<h5 id="网卡"><a href="#网卡" class="headerlink" title="网卡"></a>网卡</h5><p>网络接口卡(Network Interface Card)，目前的计算机主板上都已经嵌入了网卡，所以叫适配器更合适一点。</p>
+<p>适配器上面有处理器和存储器(包括RAM和ROM)，适配器和局域网之间的通信是以串行传输方式进行的，而适配器和计算机主板上的IO总线是以并行传输方式进行的。适配器的一个重要功能就是串行和并行的转换。</p>
+<p>适配器收到正确的帧之后使用中断通知计算机并交付给协议栈中的网络层。当要发送IP数据报时，由协议栈把IP数据报向下交给适配器，组装成帧后发送到局域网。</p>
+<h5 id="以太网的MAC层"><a href="#以太网的MAC层" class="headerlink" title="以太网的MAC层"></a>以太网的MAC层</h5><h6 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h6><p>MAC地址信息在适配器的ROM中，IP地址在计算机的存储器中。<br>MAC地址48位，全球唯一。RA是局域网全球地址的法定管理机构。</p>
+<h6 id="MAC帧"><a href="#MAC帧" class="headerlink" title="MAC帧"></a>MAC帧</h6><p>分类：1.单播 2.广播 3.多播<br>适配器可以以<strong>混杂方式</strong>进行工作，可以监听到以太网上的所有帧，黑客经常这么搞。</p>
+<p>MAC帧和PPP帧不一样，不要混为一谈，MAC帧只是工作在以太网之中，而PPP帧工作在广域网上，所以PPP是有帧结束定界符的。</p>
+<p>MAC帧的长度为64-1518字节之间。</p>
+<h4 id="扩展的以太网"><a href="#扩展的以太网" class="headerlink" title="扩展的以太网"></a>扩展的以太网</h4><h5 id="在物理层扩展以太网"><a href="#在物理层扩展以太网" class="headerlink" title="在物理层扩展以太网"></a>在物理层扩展以太网</h5><p>通过光纤，集线器等扩展以太网的规模</p>
+<h5 id="在数据链路层扩展以太网"><a href="#在数据链路层扩展以太网" class="headerlink" title="在数据链路层扩展以太网"></a>在数据链路层扩展以太网</h5><h6 id="网桥"><a href="#网桥" class="headerlink" title="网桥"></a>网桥</h6><p>网桥工作在数据链路层，集线器工作在物理层。网桥根据MAC帧的目的地址对帧进行转发和过滤，网桥收到帧后不是向所有的接口发送此帧，而是先检查此帧的目的MAC地址，然后在确定发到哪个接口，或者将其丢弃。</p>
+<p>网桥经历了一代又一代的更新，现在我们使用的为以太网交换机，其本质为一个多接口的网桥。其内部的帧转发表也是通过自学习算法逐渐建立起来的。</p>
+<h6 id="VLAN-虚拟局域网"><a href="#VLAN-虚拟局域网" class="headerlink" title="VLAN(虚拟局域网)"></a>VLAN(虚拟局域网)</h6><p>在一个局域网中逻辑性的划分多个虚拟局域网，虚拟局域网在逻辑上相互独立，交换机不会将一个虚拟局域网的广播数据发送到其他的其它的虚拟局域网中去。</p>
+<p>注意交换机是星型结构，每个主机和交换机直连，所以交换机可以精确控制每一台主机发出的帧数据。不同于总线结构，总线上的所有主机都会被动收到其它主机发出的帧数据。</p>
+<h4 id="高速以太网"><a href="#高速以太网" class="headerlink" title="高速以太网"></a>高速以太网</h4><p>高速以太网可以全双工方式工作，所以CSMA/CD协议对其不起效果。不过在半双工方式工作的时候，仍然要使用CSMA/CD协议。</p>
+<h4 id="PPPoE-PPP-over-Ethernet"><a href="#PPPoE-PPP-over-Ethernet" class="headerlink" title="PPPoE(PPP over Ethernet)"></a>PPPoE(PPP over Ethernet)</h4><p>在以太网上运行PPP。</p>
+<p>当用户利用ADSL进行宽带上网时，PC到发出帧经过ADSL之后，就转换为ADSL使用的PPP帧，这种方式不能称为以太网上网，而是利用电话线接入到因特网。</p>
+<h4 id="无线局域网-WLAN"><a href="#无线局域网-WLAN" class="headerlink" title="无线局域网(WLAN)"></a>无线局域网(WLAN)</h4><p>在MAC层使用CSMA/CA协议以及停止等待协议</p>
+<h4 id="对于PPP和MAC层的一些看法"><a href="#对于PPP和MAC层的一些看法" class="headerlink" title="对于PPP和MAC层的一些看法"></a>对于PPP和MAC层的一些看法</h4><p>PPP协议是点对点传输，所以PPPoE应该是用MAC帧封装了ppp帧，这样才能在以太网上面传输。</p>
+<p>路由器之间进行通信，如果要经过以太网，则必然要使用ARP，当然也会用MAC帧，若路由器直连，之间不经过以太网，则不会用到MAC帧。</p>
+<h3 id="3-网络层"><a href="#3-网络层" class="headerlink" title="3.网络层"></a>3.网络层</h3><p>网络层向上只提供简单灵活的、无连接的、尽最大努力交付的数据报服务。</p>
+<h4 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h4><p>IP协议是TCP/IP体系最主要的协议之一。与IP配套使用的还有以下四个协议：</p>
+<ul>
+<li>地址解析协议ARP</li>
+<li>你地址解析协议RARP</li>
+<li>网际控制报文协议ICMP</li>
+<li>网际组管理协议IGMP</li>
+</ul>
+<p>物理层使用的中间设备叫转发器，如集线器<br>链路层使用的叫网桥或者桥接器，如交换机<br>网络层使用的中间设备是路由器。<br>网络层以上的叫网关，用网关连接两个不兼容的系统需要在高层进行协议的转换。</p>
+<h5 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h5><p>IP地址由网络号和主机号组成。根据网络号可以对IP地址进行分类。</p>
+<h6 id="IP地址的划分"><a href="#IP地址的划分" class="headerlink" title="IP地址的划分"></a>IP地址的划分</h6><ul>
+<li>A类 0开头 0-127</li>
+<li>B类 10开头 128-191</li>
+<li>C类 110开头 192-223</li>
+<li>D类 1110开头</li>
+<li>E类 11110开头</li>
+</ul>
+<p>A类，B类和C类都是单播地址，D类为多播地址，E类保留为以后用。</p>
+<p>不过现在广泛使用无分类IP地址(CIDR)进行路由选择，IP地址分类基本已经成为了历史。</p>
+<p>IP地址中的网络号全0表示本网络。</p>
+<p>网络号为127保留为本地软件<strong>环回测试</strong>本主机的进程之间的通信只用。若主机发送为127开头的数据包，则不会把数据报发送到任何网络。</p>
+<p>全0的主机号表示当前主机所在的网络地址，全1的主机号表示该网络上的所有主机。</p>
+<h4 id="地址解析协议ARP"><a href="#地址解析协议ARP" class="headerlink" title="地址解析协议ARP"></a>地址解析协议ARP</h4><p>已经知道了一个机器的IP地址，需要找出其相应的物理地址。就需要使用到ARP协议。</p>
+<p>APR使用MAC帧进行封装，以广播的方式在以太网上工作，每一个主机都设有一个ARP高速缓存。</p>
+<h4 id="IP数据报的格式"><a href="#IP数据报的格式" class="headerlink" title="IP数据报的格式"></a>IP数据报的格式</h4><p>首部：固定部分20个字节，可选字段长度可变，最长不超过40个字节。不过长度必须是4字节的整数倍，不足的部分用全0填充。</p>
+<h5 id="首部组成"><a href="#首部组成" class="headerlink" title="首部组成"></a>首部组成</h5><ol>
+<li>版本 4位</li>
+<li>首部长度 4位</li>
+<li>区分服务 8位</li>
+<li>总长度 16位</li>
+<li>标识 16位</li>
+<li>标志 3位</li>
+<li>片偏移 13位</li>
+<li>生存时间 8位</li>
+<li>协议 8位</li>
+<li>首部检验和 16位</li>
+<li>原地址 32位</li>
+<li>目的地址 32位</li>
+<li>可变部分 长度不定</li>
+</ol>
+<h4 id="划分子网"><a href="#划分子网" class="headerlink" title="划分子网"></a>划分子网</h4><p>从两级IP地址到三级IP地址。为了解决IP地址利用率低，减少路由表的规模，以及解决两级IP不够灵活的问题。</p>
+<p>具体做法是将主机号的前几位作为子网号，可以将一个大型网络划分为多个子网号。</p>
+<h5 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h5><p>子网掩码是一个网络或一个子网的重要属性，IP地址与其逐位相与，便可得出网络号。例如A类地址默认的子网掩码为255.0.0.0</p>
+<p>子网网络号不能为全1或者全0，但随着CIDR的使用，现在全1和全0的子网号也可以使用了。</p>
+<p>划分子网增加了灵活性，但是却减少了能够连接在网络上的主机总数。</p>
+<p>使用子网划分后，路由表必须包含目的网络地址、子网掩码和下一跳地址(接口0，接口1…)。</p>
+<h4 id="无分类编址CIDR-构造超网"><a href="#无分类编址CIDR-构造超网" class="headerlink" title="无分类编址CIDR(构造超网)"></a>无分类编址CIDR(构造超网)</h4><p>CIDR取消了传统的A类，B类，C类以及划分子网的概念，因而可以更有效的利用IPv4的网络空间。CIDR将IP地址分为两部分，网络前缀和主机号。</p>
+<p>CIDR使用<strong>斜线记法</strong>，或称为<strong>CIDR</strong>记法。例如：128.14.35.7/20，斜线后的数字表示网络前缀的位数。</p>
+<p>全0和全1的主机号一般并不使用。</p>
+<p>CIDR也使用地址掩码，也可以进行子网划分。不过子网的网络前缀肯定是比整个组织的网络前缀长的。</p>
+<p>由于一个CIDR地址块中有很多地址，所以在路由表中就利用CIDR地址块来查找目的网络，这种地址的聚合称为<strong>路由聚合</strong>，也称为<strong>构成超网</strong>。使用路由聚合，使得路由表的复杂度大大降低。(因为我们可以将多个长前缀的网络地址块聚合为一个短前缀地址块，当然，这几个长前缀地址块要有相同的短地址前缀)</p>
+<p>使用CIDR时，路由器查找路由表进行匹配时，当使用最长前缀匹配规则。</p>
+<h4 id="网际控制报文协议ICMP"><a href="#网际控制报文协议ICMP" class="headerlink" title="网际控制报文协议ICMP"></a>网际控制报文协议ICMP</h4><p>ICMP允许主机或者路由器报告差错情况和提供有关异常情况的报告。ICMP报文使用IP数据报进行封装。</p>
+<p>ICMP报文分为ICMP差错报告报文和ICMP询问报文。</p>
+<h5 id="ICMP差错报告报文"><a href="#ICMP差错报告报文" class="headerlink" title="ICMP差错报告报文"></a>ICMP差错报告报文</h5><p>分类：</p>
+<ol>
+<li>终点不可达</li>
+<li>源点抑制</li>
+<li>时间超过</li>
+<li>参数问题</li>
+<li>改变路由(重定向)</li>
+</ol>
+<h5 id="ICMP询问报文"><a href="#ICMP询问报文" class="headerlink" title="ICMP询问报文"></a>ICMP询问报文</h5><ol>
+<li>回送请求和回答</li>
+<li>时间戳请求和回答</li>
+</ol>
+<h5 id="ICMP的应用"><a href="#ICMP的应用" class="headerlink" title="ICMP的应用"></a>ICMP的应用</h5><p>ping命令和traceroute。</p>
+<p>ping命令的原理主要是利用询问报文回送请求和回送回答报文。</p>
+<p>traceroute是利用差错报告报文，主要原理是利用TTL值逐渐递增，经过的路由器逐个回送时间超过差错报告报文，直至返回终点不可达。</p>
+<h4 id="因特网的路由选择协议"><a href="#因特网的路由选择协议" class="headerlink" title="因特网的路由选择协议"></a>因特网的路由选择协议</h4><h5 id="内部网关协议RIP"><a href="#内部网关协议RIP" class="headerlink" title="内部网关协议RIP"></a>内部网关协议RIP</h5><p>路由信息协议RIP是基于距离向量的路由选择协议，每一跳距离加1。<br>特点：</p>
+<ol>
+<li>仅和相邻路由器交换信息。</li>
+<li>交换的是自己的路由表，全部信息。</li>
+<li>固定间隔交换</li>
+</ol>
+<p>RIP协议可以收敛，过程较快。不过目的是找出到每个网络的最短距离。</p>
+<p>优点：实现简单，开销较小。</p>
+<p>缺点：当网络出现故障时，要经过较长时间才能将此信息传送到所有的路由器。路由的最大跳数不能超过15，16时即不可达。所以RIP只适用于小型互联网。</p>
+<h5 id="内部网关协议OSPF"><a href="#内部网关协议OSPF" class="headerlink" title="内部网关协议OSPF"></a>内部网关协议OSPF</h5><p>开放最短路径优先OSPF，使用最短路径算法SPF，每个路由器都有一个链路状态数据库，这个数据库实际上是全网的拓扑机构图，然后通过最短路径算法生成路由表，</p>
+<p>这个数据库一开始的建立是通过洪泛法进行的，既路由器向所有输出端口发送信息，收到信息的路由器右再次转发给其它路由器，最终所有路由器都会收到信息。</p>
+<p>OSPF可以将一个自治系统划分为若干个更小的范围，叫做区域，区域可以将洪泛法交换链路状态信息的范围局限于每一个区域，而不是整个自治系统，减少了整个网络上的通信量。区域之间通过区域边界路由器进行通信。自治系统之间的通信通过自治系统边界路由器进行。</p>
+<p>优点：链路的代价可以自定义。相同代价的链路可以负载平衡。鉴别的功能，保证了仅在可信赖的路由器之间交换链路状态信息。支持子网划分和CIDR，链路状态更新及时。最重要的是可以有层次的划分，使得每一个区域交换路由信息的通信量大大减小。</p>
+<h6 id="OSPF五种类型"><a href="#OSPF五种类型" class="headerlink" title="OSPF五种类型"></a>OSPF五种类型</h6><ol>
+<li>问候分组</li>
+<li>数据库描述分组</li>
+<li>链路状态请求</li>
+<li>链路状态更新</li>
+<li>链路状态确认</li>
+</ol>
+<h5 id="外部网关协议BGP"><a href="#外部网关协议BGP" class="headerlink" title="外部网关协议BGP"></a>外部网关协议BGP</h5><p>BGP用于AS(自治系统)之间的路由，由于因特网的规模太大，所以不能使用OSPF等协议，而且AS之间的路由选择必须考虑有关策略。</p>
+<p>BGP力求寻找比较好的路由，而并非最佳路由，采用<strong>路径向量</strong>协议。</p>
+<p>每个AS管理员需要选择至少一个路由器作为该AS的”BGP发言人”，一般选择BGP的边界路由器。</p>
+<p>BGP发言人之间通过TCP连接建立BGP会话，利用BGP会话交换路由信息。每一个BGP发言人不仅要运行BGP协议，还要运行本AS的内部网关协议。</p>
+<p>BGP协议交换路由信息的节点数量级是自治系统的量级，这比自治系统中的网络数少很多。因此路由选择不会过于复杂。</p>
+<p>BGP协议可以有效防止兜圈子，BGP支持CIDR，因此路由表中包括目的前缀，下一跳路由器，以及到达该网络要经过的各个自治系统序列。如果发现自己在这条路径中，就不能采用这条路径。</p>
+<h6 id="BGP报文类型"><a href="#BGP报文类型" class="headerlink" title="BGP报文类型"></a>BGP报文类型</h6><ol>
+<li>OPEN</li>
+<li>UPDATE</li>
+<li>KEEPALIVE</li>
+<li>NOTIFICATION</li>
+</ol>
+<h5 id="路由器的构成"><a href="#路由器的构成" class="headerlink" title="路由器的构成"></a>路由器的构成</h5><p>路由器由路由选择部分(控制部分)和分组转发部分构成。</p>
+<p>路由控制部分根据所选的协议构造出路由表，并和相邻路由器交换路由信息而不断地更新和维护路由表。</p>
+<p>分组转发部分由交换结构，一组输入端口和一组输出端口(这里的端口就是硬件接口)。</p>
+<p>路由器有数据缓冲区，来不及转发的数据报会进入缓存队列，不过若是缓存区满了，后来的数据报只能被丢弃。</p>
+<h4 id="IP多播"><a href="#IP多播" class="headerlink" title="IP多播"></a>IP多播</h4><p>广域网的多播还没办法完全实现，需要多播路由器的支持。需要用到IGMP(网际组管理协议)和多播路由协议。</p>
+<p>IP多播使用D类IP地址。</p>
+<p>局域网的硬件多播。以太网的多播地址范围是从01-00-5E-00-00-00到01-00-5E-7F-FF-FF.</p>
+<h4 id="本地地址和虚拟专用网VPN"><a href="#本地地址和虚拟专用网VPN" class="headerlink" title="本地地址和虚拟专用网VPN"></a>本地地址和虚拟专用网VPN</h4><p>由于IP地址的紧缺，不可能做到IP和主机一一对应，而且，一个机构内部的主机很多时候要和本机构内的其它主机进行通信。如果使用TCP/IP协议，那么这个时候内部的主机的IP地址可以由本机构分配，这种仅在本机构有效的IP地址称为本地地址。</p>
+<p>为了避免IP地址的二义性问题，RFC 1918指定了一些专用地址，在因特网中的所有路由器，对目的地址为专用地址的数据报一律不进行转发。</p>
+<p>专用地址为：</p>
+<ol>
+<li>10.0.0.0-10.255.255.255(或记为10/8)</li>
+<li>172.16.0.0-172.31.255.255(或记为172.16/12)</li>
+<li>192.168.0.0-192.168.255.255(或记为192.168/16)</li>
+</ol>
+<p>本地地址的主机访问因特网需要用到NAT或NAPT映射技术。</p>
+<p>VPN又被称为内联网，VPN技术可以使得同一个机构，不同地点的部门使用共同的网络环境。VPN将因特网作为不同地点相互交流的通信载体，使用者需要先登入机构的VPN服务器，通过认证，建立加密隧道，然后才能进行内部数据访问。</p>
+<h4 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h4><p>IPv6是解决IP地址耗尽的根本措施。</p>
+<h5 id="IPv6的特点"><a href="#IPv6的特点" class="headerlink" title="IPv6的特点"></a>IPv6的特点</h5><ol>
+<li>更大的地址空间(128位地址)</li>
+<li>灵活的首部格式</li>
+<li>改进的选项</li>
+<li>支持即插即用</li>
+<li>支持资源的预分配</li>
+<li>IPv6首部采用8字节对齐</li>
+<li>目的地址可以是单播多播和任播</li>
+<li>使用冒号十六进制记法</li>
+</ol>
+<p>IPv6的过渡可以使用双协议栈或隧道技术。</p>
+<h3 id="4-传输层"><a href="#4-传输层" class="headerlink" title="4.传输层"></a>4.传输层</h3><p>传输层向应用进程之间提供端到端的逻辑通信。</p>
+<h4 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h4><p>传输层使用协议端口号对通信进程进行区分。端口用一个16位端口号进行标志，最多可允许65535个端口号。</p>
+<h5 id="熟知端口"><a href="#熟知端口" class="headerlink" title="熟知端口"></a>熟知端口</h5><p>0-1023.由IANA负责分配给一些常用的应用层程序固定使用。例如：</p>
+<p>FTP:21,TELENT:23,SMTP:25,DNS:53,TFTP:69,HTTP:80,SNMP:161,SNMP:162,HTTPS:443.</p>
+<h5 id="登记端口"><a href="#登记端口" class="headerlink" title="登记端口"></a>登记端口</h5><p>1024-49151,IANA不分配也不控制，但是可以在IANA注册登记，以防重复使用。</p>
+<h5 id="动态端口"><a href="#动态端口" class="headerlink" title="动态端口"></a>动态端口</h5><p>49151-65535，用户自己发起通信时可以临时使用，没有什么限制。</p>
+<h4 id="用户数据报协议UDP"><a href="#用户数据报协议UDP" class="headerlink" title="用户数据报协议UDP"></a>用户数据报协议UDP</h4><h5 id="UDP的特点："><a href="#UDP的特点：" class="headerlink" title="UDP的特点："></a>UDP的特点：</h5><ol>
+<li>无连接</li>
+<li>最大努力交付</li>
+<li>没有拥塞控制</li>
+<li>面向报文</li>
+<li>支持一对一，一对多，多对一，多对多的交互通信</li>
+<li>8个字节的首部开销</li>
+</ol>
+<h5 id="UDP首部格式"><a href="#UDP首部格式" class="headerlink" title="UDP首部格式"></a>UDP首部格式</h5><ol>
+<li>源端口</li>
+<li>目的端口</li>
+<li>长度</li>
+<li>检验和</li>
+</ol>
+<p>每个字段都是两个字节。UDP的差错检验要加入12个字节的伪首部，而且在检验时，是将首部和数据部分一起都检验的。</p>
+<h4 id="传输控制协议TCP"><a href="#传输控制协议TCP" class="headerlink" title="传输控制协议TCP"></a>传输控制协议TCP</h4><p>TCP提供全双工的可靠交付服务，和UDP的最大区别是：TCP是面向连接的，而UDP是无连接的。TCP还有流量控制和拥塞控制机制。</p>
+<h5 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h5><ol>
+<li>面向连接</li>
+<li>点对点</li>
+<li>可靠交付</li>
+<li>全双工通信</li>
+<li>面向字节流</li>
+</ol>
+<h5 id="报文结构"><a href="#报文结构" class="headerlink" title="报文结构"></a>报文结构</h5><ol>
+<li>源端口和目的端口  各2个字节</li>
+<li>序号    4字节</li>
+<li>确认号  4字节</li>
+<li>数据偏移 4位 指出TCP报文的数据部分距离TCP报文起始处有多远，这里的单位是4字节的倍数，所有数据偏移最大长度为60字节，这是TCP报文首部的最大长度</li>
+<li>保留  6位</li>
+<li>标志位  分为紧急URG，确认ACK，推送PSH，复位RST，同步SYN，终止FIN   这6种标志各占1位</li>
+<li>窗口  2字节</li>
+<li>检验和  2字节 和UDP检验方式类似</li>
+<li>选项 长度可变</li>
+</ol>
+<p>TCP报文首部20字节固定长度，40字节的可变长度，最大为60字节。</p>
+<p><strong>MSS</strong>:最大报文段长度，默认是536字节，所以TCP默认最大556字节。MSS=TCP报文长度-TCP首部长度。</p>
+<h5 id="TCP的可靠数据传输"><a href="#TCP的可靠数据传输" class="headerlink" title="TCP的可靠数据传输"></a>TCP的可靠数据传输</h5><h6 id="数据编号与确认"><a href="#数据编号与确认" class="headerlink" title="数据编号与确认"></a>数据编号与确认</h6><p>TCP将应用层交下来的长报文看成是一个个字节组成的数据流，并使每一个字节对应于一个序号。在连接建立时，双方TCP要各自确定初始序号。TCP报文首部中的序号字段数值标识该报文段中紧接着首部后面的第一个数据字节的序号。</p>
+<p>TCP使用积累确认，即确认是对所有按序接收到的数据的确认。接收方返回的确认号是已按序收到的数据的最高序号加一。也就是说确认号表示接收方期望下次收到的数据中的第一个数据字节序号。</p>
+<p>确认信息可以使用捎带确认，但是不能超过0.5s.</p>
+<h6 id="以字节为单位的滑动窗口"><a href="#以字节为单位的滑动窗口" class="headerlink" title="以字节为单位的滑动窗口"></a>以字节为单位的滑动窗口</h6><p>TCP采用滑动窗口协议来提高报文段的传输效率。</p>
+<p>TCP发送端维护一个发送窗口，落入发送窗口的数据可以被发送，窗口外左侧是已发送并受到确认的字节。窗口外右侧是还不能被发送的字节，窗口收到确认则向右移动，知道左侧边缘正好包含确认号的字节。</p>
+<p>TCP的流量控制和拥塞控制会根据情况动态的调整发送窗口的上限值，从而控制发送数据的平均速率。</p>
+<h6 id="超时重传时间的选择"><a href="#超时重传时间的选择" class="headerlink" title="超时重传时间的选择"></a>超时重传时间的选择</h6><p>RTT(Round-Trip Time):往返时延<br>RTTs:平均往返时延<br>RTO(Retransmission Time-Out):计时器设置的超时重传时间</p>
+<p>超时重传时间的计算可参考RFC 2988.</p>
+<h6 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h6><p>发送端一脸受到三个重复的确认时，就应该立即重传丢失的报文段，而不必等待重传计时器超时。</p>
+<h5 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h5><p>流量控制服务用于解决因发送方发送数据太快，而导致接收方来不及接收，以至于接收方缓存溢出的问题。</p>
+<p>TCP接收方要维持一个接收窗口(rwnd, receiver window)的变量，其值不能大于接收缓存的大小。</p>
+<p>TCP报文首部的窗口字段写入的字段就是当前接收方的接收窗口大小。注意，只有ACK置为1时确认号字段才有意义。</p>
+<p>发送方要根据接收方回传的窗口大小动态的调整自己的发送窗口大小。</p>
+<h5 id="TCP连接管理"><a href="#TCP连接管理" class="headerlink" title="TCP连接管理"></a>TCP连接管理</h5><p>这里要注意，SYN和FIN都要消耗一个序列号，ACK报文不携带数据的情况下，ACK不消耗序列号，但若是携带数据的话，则是要消耗序列号的。基本上现实的TCP通信中，除了SYN，发送TCP报文时都会带上ACK标志的，可以提高信道的利用率。</p>
+<h6 id="TCP的三次握手"><a href="#TCP的三次握手" class="headerlink" title="TCP的三次握手"></a>TCP的三次握手</h6><ol>
+<li>客户端发送 SYN=1，seq=x 到服务端</li>
+<li>服务端返回 SYN=1，ACK=1，seq=y，ack=x+1 到客户端</li>
+<li>客户端发送 ACK=1，seq=x+1,ack=y+1 到服务端</li>
+</ol>
+<p>这里的seq表示序列号，ack表示确认号。</p>
+<p>三次握手后，连接建立。</p>
+<h6 id="TCP的四次挥手"><a href="#TCP的四次挥手" class="headerlink" title="TCP的四次挥手"></a>TCP的四次挥手</h6><ol>
+<li>客户端发送 FIN=1，seq=u 到服务端</li>
+<li>服务端返回 ACK=1，seq=v，ack=u+1 到客户端，现在已经进入了半关闭状态，不过这只是表示客户端告诉服务器，我已经没什么要发给你了，但是你要是还有什么要发给我的，我还可以接收(这种情况极少，基本上不会再发数据了)。</li>
+<li>服务端发送 FIN=1，seq=v，ack=u+1 到客户端</li>
+<li>客户端返回 ACK=1，seq=u+1，ack=v+1 到服务端</li>
+</ol>
+<p>四次挥手后，连接断开。</p>
+<p><strong>TCB</strong>：传输控制程序块(Transmission Control Block),它存储了每一个连接中的一些重要信息，如TCP连接表，到发送和接收缓存的指针，到重传队列的指针，当前的发送和接收序号等等。</p>
+<h4 id="拥塞控制原理"><a href="#拥塞控制原理" class="headerlink" title="拥塞控制原理"></a>拥塞控制原理</h4><p>网络传输的带宽是有限的，当网络中出现太多的分组时，网络性能会开始下降，这种情况称为拥塞，而当拥塞达到一定程度，甚至会造成死锁，网络传输的吞吐量为0.</p>
+<p>所谓拥塞控制就是防止过多的数据注入到网络中，避免路由器或者链路过载。</p>
+<p>拥塞控制分为开环控制和闭环控制，开环控制试图用良好的设计来解决问题，当系统运行起来后，不需要中途修正，也就是说不需要考虑网络的当前状态。</p>
+<p>鉴于互联网的复杂性，开环控制基本上不可能实现，所以还是说说闭环控制吧。</p>
+<p>闭环控制算法又分为显式反馈算法和隐式反馈算法。显示就是利用ICMP类似的机制来实现，不过拥堵已经发生，如果再使用这种机制，无异于火上浇油。所以TCP用的是隐式反馈算法。</p>
+<h5 id="TCP的拥塞控制"><a href="#TCP的拥塞控制" class="headerlink" title="TCP的拥塞控制"></a>TCP的拥塞控制</h5><p>TCP的发送方维持一个拥塞窗口(cwnd, congestion window)的变量.拥塞窗口取决于网络的拥塞程度，动态变化。TCP发送方确定发送速率时，既要根据接收方的接受能力，又要考虑不使网络发生拥塞。所以：</p>
+<p>发送窗口的上限值=Min[rwnd,cwnd]</p>
+<p>TCP发送方通过分组丢失来判断网络是否发生了拥堵，所以，当重传计数器超时或者接收到三个重复确认时，TCP的发送方就认为网络发生了拥堵。</p>
+<p>TCP发送方采用<strong>慢开始(slow-start)</strong> , <strong>拥塞避免(congestion avoidance)</strong> , <strong>快速重传(fast retransmit)</strong> 和 <strong>快速恢复(fast recovery)</strong> 算法来改变发送速率。</p>
+<h6 id="慢开始和拥塞避免"><a href="#慢开始和拥塞避免" class="headerlink" title="慢开始和拥塞避免"></a>慢开始和拥塞避免</h6><p>由小到大逐渐增大发送发的拥塞窗口数值，可将拥塞窗口数值设置为1个MSS的数值，每收到一个对新的报文段的确认后，将拥塞窗口增加至多一个MSS的数值。</p>
+<p>由此可见，慢开始每过一个RTT，发送速率几乎增加一倍，所以这个“慢”，其实指的是一开始发送速率很慢，并不是指拥塞窗口的增长速率慢。</p>
+<p>当慢开始的cwnd达到<strong>慢开始门限ssthresh</strong>时，停止慢开始算法而使用拥塞避免算法。</p>
+<p>具体做法是拥塞避免算法每经过大约一个RTT时间就将cwnd增加一个RSS大小。实际做法是，每收到一个确认，就将cwnd增加MSS*(MSS/cwnd).这样cwnd按线性缓慢增长，比慢开始慢的多。</p>
+<p>无论是在慢开始阶段还是拥塞避免阶段，只要发现出现网络拥堵，就立即将cwnd置为1，并执行慢开始算法。同时将ssthresh设置为出现拥堵时的发送窗口的一半。</p>
+<h6 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h6><p>由于重传计数器超时和收到三个重复的ACK时，当前的网络拥堵状况是不一样的，收到三个重复的ACK意味着当前的网络并不是特别拥堵。所以这里应该使用快速恢复算法</p>
+<p>快速恢复算法将ssthresh置为发送窗口的一半，这一点和慢启动一样，不同的是并不将cwnd直接置为1，而是从ssthresh开始执行拥塞避免算法。</p>
+<h3 id="5-应用层"><a href="#5-应用层" class="headerlink" title="5.应用层"></a>5.应用层</h3><h4 id="域名系统DNS"><a href="#域名系统DNS" class="headerlink" title="域名系统DNS"></a>域名系统DNS</h4><p>将域名和ip地址进行映射。DNS除了这个功能外，还提供主机别名，负载分配，反向域名解析等功能。</p>
+<h5 id="域名结构"><a href="#域名结构" class="headerlink" title="域名结构"></a>域名结构</h5><p>xxx.三级域名.二级域名.顶级域名</p>
+<h5 id="域名服务器"><a href="#域名服务器" class="headerlink" title="域名服务器"></a>域名服务器</h5><p>根域名服务器，顶级域名服务器，权限域名服务器，本地域名服务器</p>
+<p>域名解析过程分为递归查询和迭代查询。</p>
+<h5 id="统一资源定位符URL"><a href="#统一资源定位符URL" class="headerlink" title="统一资源定位符URL"></a>统一资源定位符URL</h5><p>&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</p>
+<h5 id="超文本传输协议HTTP"><a href="#超文本传输协议HTTP" class="headerlink" title="超文本传输协议HTTP"></a>超文本传输协议HTTP</h5><p>HTTP使用TCP作为传输层协议，是一个无状态协议。</p>
+<h6 id="非持续连接与持续连接"><a href="#非持续连接与持续连接" class="headerlink" title="非持续连接与持续连接"></a>非持续连接与持续连接</h6><p>HTTP/1.0采用非持续连接方式，每次请求对应一个TCP连接。</p>
+<p>HTTP/1.1使用持续连接方式，同一个客户和该服务器可以在这条连接上传送后续的HTTP请求报文和响应报文。</p>
+<p>HTTP/1.1还可以使用流水线方式工作，即客户可以连续发送多个请求报文，这样一个接一个的请求报文到达服务器后，服务器就发回一个接一个的报文响应，使TCP连接中的空闲时间减少，提高了网络传输的效率。</p>
+<h6 id="代理服务器"><a href="#代理服务器" class="headerlink" title="代理服务器"></a>代理服务器</h6><p>代理服务器又称为万维网缓存，代理服务器把最近的一些请求和响应暂存在本地磁盘中，当新请求到来时，若代理服务器发现这个请求与暂时存放的请求相同，就返回暂存的响应。例如校园网解决网络拥堵和时延过高的问题。</p>
+<h6 id="HTTP报文结构"><a href="#HTTP报文结构" class="headerlink" title="HTTP报文结构"></a>HTTP报文结构</h6><p><strong>请求报文</strong>–从客户端向服务器发送请求报文。<br><strong>响应报文</strong>–从服务端到客户的回答。</p>
+<ol>
+<li>请求行/状态行：用于区分是请求报文还是响应报文。在请求报文中第一行是请求行，在响应报文中第一行是状态行。</li>
+<li>首部行：用来说明浏览器、服务器或报文主体的一些信息。</li>
+<li>实体主体：请求报文一般没有这个字段，有些响应报文中可能没有这个字段。</li>
+</ol>
+<p>请求行只有三个内容：方法，请求资源URL以及HTTP的版本。</p>
+<p>方法有：OPTION,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT</p>
+<p>状态行包括三项内容：HTTP的版本，状态码以及解释状态码的简单短语。</p>
+<p>状态码：1xx表示通知信息，2xx表示成功，3xx表示重定向，4xx表示客户的差错，5xx表示服务器的差错。</p>
+<h6 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h6><p>由于HTTP是无状态的协议，所以服务器为了辨识用户，增加了Cookie机制，Cookie由服务端返回，浏览器将其存在本地。下次再次进行请求时，会带上Cookie请求，服务器通过Cookie判断当前用户的身份。</p>
+<h5 id="万维网的文档"><a href="#万维网的文档" class="headerlink" title="万维网的文档"></a>万维网的文档</h5><h6 id="超文本标记语言HTML"><a href="#超文本标记语言HTML" class="headerlink" title="超文本标记语言HTML"></a>超文本标记语言HTML</h6><p>静态文档</p>
+<h6 id="动态文档"><a href="#动态文档" class="headerlink" title="动态文档"></a>动态文档</h6><p>动态文档技术主要有：CGI，PHP，JSP，ASP</p>
+<h6 id="活动文档"><a href="#活动文档" class="headerlink" title="活动文档"></a>活动文档</h6><p>活动文档技术主要有: java applet,javaScript,ActionScript等</p>
+<p>目前万维网上的文档都是这三种文档的混合体。</p>
+<h5 id="电子邮件-e-mail"><a href="#电子邮件-e-mail" class="headerlink" title="电子邮件(e-mail)"></a>电子邮件(e-mail)</h5><h6 id="简单邮件传送协议SMTP"><a href="#简单邮件传送协议SMTP" class="headerlink" title="简单邮件传送协议SMTP"></a>简单邮件传送协议SMTP</h6><p>用于从用户代理到邮件服务器以及在邮件服务器之间的邮件传送。</p>
+<h6 id="邮件读取协议POP3和IMAP"><a href="#邮件读取协议POP3和IMAP" class="headerlink" title="邮件读取协议POP3和IMAP"></a>邮件读取协议POP3和IMAP</h6><p>用户代理从邮件服务器读取邮件时要用到这两个协议。IMAP比POP3复杂得多，不过IMAP提供的功能也比较多，IMAP允许用户管理邮件服务器上面的邮件。</p>
+<h6 id="通用因特网邮件扩充MIME"><a href="#通用因特网邮件扩充MIME" class="headerlink" title="通用因特网邮件扩充MIME"></a>通用因特网邮件扩充MIME</h6><p>由于SMTP限于传送7位的ASCII码，不能传送可执行文件或其他二进制对象(因为以解读ASCII码的形式解读二进制文件，会产生大量的特殊字符)。</p>
+<p>MIME没有改动或者取代SMTP，只是一个辅助协议。MIME将非ASCII码数据转换为ASCII码数据，交给SMTP传送。在接收方再把收到的数据转换为原来的ASCII码数据。</p>
+<p>MIME新增5个首部：</p>
+<ol>
+<li>MIME-Version</li>
+<li>Content-Description</li>
+<li>Content-Id</li>
+<li>Content-Transfer-Encoding</li>
+<li>Content-Type</li>
+</ol>
+<p>内容传送编码：</p>
+<p><strong>quoted-printable</strong> : 适用于少量的非ASCII码。对于每个字节，如果是可打印的ASCII码，除了’=’之外，都不改变。如果不能打印，则将每个字节的二进制代码用两个十六进制数字表示，然后在前面再加上一个等号 ‘=’。如果全是不可打印的字符的话，则编码的开销达到200%。也就是32位的数据编码后会达到96位的长度。如果全是可打印的二进制码的话，则开销为0。</p>
+<p><strong>Base64</strong>：将二进制码划分为一个个24位长的单元，然后将每一个24位单元划分为4个6位组，每个6位组按以下方式转换为ASCII码。0-63分别对应26个大写字母，26个小写字母，0-9，+代表62，/代表63。用 == 表示末尾只有8位，用 = 表示末尾是16位。因为如果结尾的长度不足24位，需要用全0填充至24位。所以需要用到 == 和 = 来说明具体是多少位。</p>
+<p>内容类型：</p>
+<p>Text,Image,Audio,Video,Application,Message,multipart</p>
+<p>子类型：</p>
+<p>plain,richtext,gif,jpeg,basic,mpeg,octet-stream,partial,external-body,mixed,alternative,parallel,digest.</p>
+<h5 id="文件传输协议FTP"><a href="#文件传输协议FTP" class="headerlink" title="文件传输协议FTP"></a>文件传输协议FTP</h5><p>用于文件传输。。。</p>
+<h5 id="动态主机配置协议DHCP"><a href="#动态主机配置协议DHCP" class="headerlink" title="动态主机配置协议DHCP"></a>动态主机配置协议DHCP</h5><p>一台计算机连接到因特网需要配置以下参数：</p>
+<ol>
+<li>IP地址</li>
+<li>子网掩码</li>
+<li>默认路由器的IP地址</li>
+<li>域名服务器的IP地址</li>
+</ol>
+<p>动态主机配置协议DHCP提供了一种机制，称为即插即用联网。允许一台计算机加入新的网络和获取IP地址而不用手工参与。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/05/04/网络协议五层模型/">网络协议五层模型</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Forevas</a></p>
+        <p><span>发布时间:</span>2018-05-04, 23:31:02</p>
+        <p><span>最后更新:</span>2018-05-22, 23:42:37</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/05/04/网络协议五层模型/" title="网络协议五层模型">https://forevas.github.io/2018/05/04/网络协议五层模型/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://forevas.github.io/2018/05/04/网络协议五层模型/　　作者: Forevas" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/04/09/红黑树/">
+                    红黑树
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-物理层"><span class="toc-number">1.</span> <span class="toc-text">1.物理层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#调制解调"><span class="toc-number">1.1.</span> <span class="toc-text">调制解调</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ADSL，FTTX，无线接入技术"><span class="toc-number">1.2.</span> <span class="toc-text">ADSL，FTTX，无线接入技术</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-数据链路层"><span class="toc-number">2.</span> <span class="toc-text">2.数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PPP协议特点"><span class="toc-number">2.1.</span> <span class="toc-text">PPP协议特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CRC以及FCS"><span class="toc-number">2.2.</span> <span class="toc-text">CRC以及FCS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#MTU"><span class="toc-number">2.2.1.</span> <span class="toc-text">MTU</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#以太网"><span class="toc-number">2.3.</span> <span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#CSMA-CD协议"><span class="toc-number">2.3.1.</span> <span class="toc-text">CSMA/CD协议</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#网卡"><span class="toc-number">2.3.2.</span> <span class="toc-text">网卡</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#以太网的MAC层"><span class="toc-number">2.3.3.</span> <span class="toc-text">以太网的MAC层</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#MAC地址"><span class="toc-number">2.3.3.1.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#MAC帧"><span class="toc-number">2.3.3.2.</span> <span class="toc-text">MAC帧</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展的以太网"><span class="toc-number">2.4.</span> <span class="toc-text">扩展的以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#在物理层扩展以太网"><span class="toc-number">2.4.1.</span> <span class="toc-text">在物理层扩展以太网</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#在数据链路层扩展以太网"><span class="toc-number">2.4.2.</span> <span class="toc-text">在数据链路层扩展以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#网桥"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">网桥</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#VLAN-虚拟局域网"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">VLAN(虚拟局域网)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#高速以太网"><span class="toc-number">2.5.</span> <span class="toc-text">高速以太网</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PPPoE-PPP-over-Ethernet"><span class="toc-number">2.6.</span> <span class="toc-text">PPPoE(PPP over Ethernet)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无线局域网-WLAN"><span class="toc-number">2.7.</span> <span class="toc-text">无线局域网(WLAN)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对于PPP和MAC层的一些看法"><span class="toc-number">2.8.</span> <span class="toc-text">对于PPP和MAC层的一些看法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-网络层"><span class="toc-number">3.</span> <span class="toc-text">3.网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IP协议"><span class="toc-number">3.1.</span> <span class="toc-text">IP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IP地址"><span class="toc-number">3.1.1.</span> <span class="toc-text">IP地址</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#IP地址的划分"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">IP地址的划分</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#地址解析协议ARP"><span class="toc-number">3.2.</span> <span class="toc-text">地址解析协议ARP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP数据报的格式"><span class="toc-number">3.3.</span> <span class="toc-text">IP数据报的格式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#首部组成"><span class="toc-number">3.3.1.</span> <span class="toc-text">首部组成</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#划分子网"><span class="toc-number">3.4.</span> <span class="toc-text">划分子网</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#子网掩码"><span class="toc-number">3.4.1.</span> <span class="toc-text">子网掩码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无分类编址CIDR-构造超网"><span class="toc-number">3.5.</span> <span class="toc-text">无分类编址CIDR(构造超网)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#网际控制报文协议ICMP"><span class="toc-number">3.6.</span> <span class="toc-text">网际控制报文协议ICMP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ICMP差错报告报文"><span class="toc-number">3.6.1.</span> <span class="toc-text">ICMP差错报告报文</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ICMP询问报文"><span class="toc-number">3.6.2.</span> <span class="toc-text">ICMP询问报文</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ICMP的应用"><span class="toc-number">3.6.3.</span> <span class="toc-text">ICMP的应用</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#因特网的路由选择协议"><span class="toc-number">3.7.</span> <span class="toc-text">因特网的路由选择协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#内部网关协议RIP"><span class="toc-number">3.7.1.</span> <span class="toc-text">内部网关协议RIP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#内部网关协议OSPF"><span class="toc-number">3.7.2.</span> <span class="toc-text">内部网关协议OSPF</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#OSPF五种类型"><span class="toc-number">3.7.2.1.</span> <span class="toc-text">OSPF五种类型</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#外部网关协议BGP"><span class="toc-number">3.7.3.</span> <span class="toc-text">外部网关协议BGP</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#BGP报文类型"><span class="toc-number">3.7.3.1.</span> <span class="toc-text">BGP报文类型</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#路由器的构成"><span class="toc-number">3.7.4.</span> <span class="toc-text">路由器的构成</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP多播"><span class="toc-number">3.8.</span> <span class="toc-text">IP多播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#本地地址和虚拟专用网VPN"><span class="toc-number">3.9.</span> <span class="toc-text">本地地址和虚拟专用网VPN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IPv6"><span class="toc-number">3.10.</span> <span class="toc-text">IPv6</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IPv6的特点"><span class="toc-number">3.10.1.</span> <span class="toc-text">IPv6的特点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-传输层"><span class="toc-number">4.</span> <span class="toc-text">4.传输层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#端口号"><span class="toc-number">4.1.</span> <span class="toc-text">端口号</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#熟知端口"><span class="toc-number">4.1.1.</span> <span class="toc-text">熟知端口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#登记端口"><span class="toc-number">4.1.2.</span> <span class="toc-text">登记端口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#动态端口"><span class="toc-number">4.1.3.</span> <span class="toc-text">动态端口</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用户数据报协议UDP"><span class="toc-number">4.2.</span> <span class="toc-text">用户数据报协议UDP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#UDP的特点："><span class="toc-number">4.2.1.</span> <span class="toc-text">UDP的特点：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#UDP首部格式"><span class="toc-number">4.2.2.</span> <span class="toc-text">UDP首部格式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#传输控制协议TCP"><span class="toc-number">4.3.</span> <span class="toc-text">传输控制协议TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#特点"><span class="toc-number">4.3.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#报文结构"><span class="toc-number">4.3.2.</span> <span class="toc-text">报文结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP的可靠数据传输"><span class="toc-number">4.3.3.</span> <span class="toc-text">TCP的可靠数据传输</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#数据编号与确认"><span class="toc-number">4.3.3.1.</span> <span class="toc-text">数据编号与确认</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#以字节为单位的滑动窗口"><span class="toc-number">4.3.3.2.</span> <span class="toc-text">以字节为单位的滑动窗口</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#超时重传时间的选择"><span class="toc-number">4.3.3.3.</span> <span class="toc-text">超时重传时间的选择</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#快速重传"><span class="toc-number">4.3.3.4.</span> <span class="toc-text">快速重传</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#流量控制"><span class="toc-number">4.3.4.</span> <span class="toc-text">流量控制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP连接管理"><span class="toc-number">4.3.5.</span> <span class="toc-text">TCP连接管理</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#TCP的三次握手"><span class="toc-number">4.3.5.1.</span> <span class="toc-text">TCP的三次握手</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#TCP的四次挥手"><span class="toc-number">4.3.5.2.</span> <span class="toc-text">TCP的四次挥手</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#拥塞控制原理"><span class="toc-number">4.4.</span> <span class="toc-text">拥塞控制原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#TCP的拥塞控制"><span class="toc-number">4.4.1.</span> <span class="toc-text">TCP的拥塞控制</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#慢开始和拥塞避免"><span class="toc-number">4.4.1.1.</span> <span class="toc-text">慢开始和拥塞避免</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#快速恢复"><span class="toc-number">4.4.1.2.</span> <span class="toc-text">快速恢复</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-应用层"><span class="toc-number">5.</span> <span class="toc-text">5.应用层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#域名系统DNS"><span class="toc-number">5.1.</span> <span class="toc-text">域名系统DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#域名结构"><span class="toc-number">5.1.1.</span> <span class="toc-text">域名结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#域名服务器"><span class="toc-number">5.1.2.</span> <span class="toc-text">域名服务器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#统一资源定位符URL"><span class="toc-number">5.1.3.</span> <span class="toc-text">统一资源定位符URL</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#超文本传输协议HTTP"><span class="toc-number">5.1.4.</span> <span class="toc-text">超文本传输协议HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#非持续连接与持续连接"><span class="toc-number">5.1.4.1.</span> <span class="toc-text">非持续连接与持续连接</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#代理服务器"><span class="toc-number">5.1.4.2.</span> <span class="toc-text">代理服务器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HTTP报文结构"><span class="toc-number">5.1.4.3.</span> <span class="toc-text">HTTP报文结构</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Cookie"><span class="toc-number">5.1.4.4.</span> <span class="toc-text">Cookie</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#万维网的文档"><span class="toc-number">5.1.5.</span> <span class="toc-text">万维网的文档</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#超文本标记语言HTML"><span class="toc-number">5.1.5.1.</span> <span class="toc-text">超文本标记语言HTML</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#动态文档"><span class="toc-number">5.1.5.2.</span> <span class="toc-text">动态文档</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#活动文档"><span class="toc-number">5.1.5.3.</span> <span class="toc-text">活动文档</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#电子邮件-e-mail"><span class="toc-number">5.1.6.</span> <span class="toc-text">电子邮件(e-mail)</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#简单邮件传送协议SMTP"><span class="toc-number">5.1.6.1.</span> <span class="toc-text">简单邮件传送协议SMTP</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#邮件读取协议POP3和IMAP"><span class="toc-number">5.1.6.2.</span> <span class="toc-text">邮件读取协议POP3和IMAP</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#通用因特网邮件扩充MIME"><span class="toc-number">5.1.6.3.</span> <span class="toc-text">通用因特网邮件扩充MIME</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件传输协议FTP"><span class="toc-number">5.1.7.</span> <span class="toc-text">文件传输协议FTP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#动态主机配置协议DHCP"><span class="toc-number">5.1.8.</span> <span class="toc-text">动态主机配置协议DHCP</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"网络协议五层模型　| 厚德载物，追求卓越　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'https://forevas.github.io/2018/05/04/网络协议五层模型/';
+            this.page.identifier = '2018/05/04/网络协议五层模型/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//forevas.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/04/09/红黑树/" title="下一篇: 红黑树">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/05/04/网络协议五层模型/">网络协议五层模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/09/红黑树/">红黑树</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/29/B-tree和B-tree/">B-tree和B+tree</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/Android-Studio依赖方式/">Android Studio依赖方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/04/Android进程优先级/">Android进程优先级</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/25/Android-View体系/">Android View体系</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/23/Android-IPC机制/">Android IPC机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/05/Android序列化/">Android序列化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/20/ActivityThread总结/">ActivityThread总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/05/Context总结/">Context总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/12/ANR机制/">ANR机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/03/RxJava学习总结/">RxJava学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/ThreadLocal/">ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/15/String原理解析/">String原理解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/07/Java垃圾回收机制/">Java垃圾回收机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/JVM内存模型/">JVM内存模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/Java-Throwable体系/">Java Throwable体系</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Java注解/">Java注解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/15/开发技巧/">开发技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/01/模块化-组件化-插件化/">模块化,组件化,插件化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/21/OpenGL-Es学习总结/">OpenGL Es学习总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/15/Android音频处理-采集/">Android音频处理-采集</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/05/音视频基础/">音视频基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/25/ButterKnife解析/">ButterKnife解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/10/OkHttp源码解析/">Okhttp源码解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/04/浅谈设计模式-代理模式和装饰模式/">浅谈设计模式-代理模式和装饰模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/27/浅谈设计模式-Builder模式/">浅谈设计模式-Builder模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/浅谈设计模式-单例模式/">浅谈设计模式-单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/20/Windows下使用MinGW编译FFmpeg/">Windows下使用MinGW编译FFmpeg</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/搭建Shadowsocks代理服务实现科学上网/">搭建Shadowsocks代理服务实现科学上网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/08/新的开始/">新的开始</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 Forevas
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
